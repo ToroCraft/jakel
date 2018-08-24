@@ -19,6 +19,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.torocraft.jakel.api.EnchantApi;
 import net.torocraft.jakel.api.SpawnApi;
 import net.torocraft.jakel.api.TraitApi;
 import net.torocraft.jakel.traits.Trait;
@@ -68,6 +69,11 @@ public class JakelCommand extends CommandBase {
     }
 
     EntityPlayer player = (EntityPlayer) sender;
+
+
+    ItemStack firstItem = getHotBarItems(player).get(0);
+
+    EnchantApi.enchant(firstItem);
 
     logHotBarItems(player);
   }
