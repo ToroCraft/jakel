@@ -26,13 +26,13 @@ public class JakelCommand extends CommandBase {
   @Override
   @Nonnull
   public String getName() {
-    return "torotraits";
+    return "jakel";
   }
 
   @Override
   @Nonnull
   public String getUsage(@Nullable ICommandSender sender) {
-    return "commands.torotraits.usage";
+    return "commands.jakel.usage";
   }
 
   @Override
@@ -45,7 +45,7 @@ public class JakelCommand extends CommandBase {
       @Nonnull String[] args) throws CommandException {
 
     if (args.length < 1) {
-      throw new WrongUsageException("commands.torotraits.usage");
+      throw new WrongUsageException("commands.jakel.usage");
     }
 
     String command = args[0];
@@ -55,7 +55,7 @@ public class JakelCommand extends CommandBase {
         spawn(sender, args);
         return;
       default:
-        throw new WrongUsageException("commands.torotraits.usage");
+        throw new WrongUsageException("commands.jakel.usage");
     }
   }
 
@@ -65,7 +65,7 @@ public class JakelCommand extends CommandBase {
     }
 
     if (args.length != 4) {
-      throw new WrongUsageException("commands.torotraits.spawn");
+      throw new WrongUsageException("commands.jakel.spawn");
     }
 
     EntityPlayer player = getCommandSenderAsPlayer(sender);
@@ -74,14 +74,14 @@ public class JakelCommand extends CommandBase {
     EntityCreature entity = SpawnApi.getEntityFromString(world, args[1]);
 
     if (entity == null) {
-      throw new WrongUsageException("commands.torotraits.spawn");
+      throw new WrongUsageException("commands.jakel.spawn");
     }
 
     Type traitType;
     try {
       traitType = Type.valueOf(args[2]);
     } catch (Exception e) {
-      throw new WrongUsageException("commands.torotraits.spawn");
+      throw new WrongUsageException("commands.jakel.spawn");
     }
 
     Trait trait = new Trait(traitType, i(args[3]));

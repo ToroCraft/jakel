@@ -8,8 +8,8 @@ Diablo style loot / combat system for Minecraft
 ## Development Environment Setup
 
 ```
-git clone git@github.com:ToroCraft/ToroTraits.git
-cd ToroTraits
+git clone git@github.com:ToroCraft/jakel.git
+cd jakel
 gradle setupDecompWorkspace
 ```
 
