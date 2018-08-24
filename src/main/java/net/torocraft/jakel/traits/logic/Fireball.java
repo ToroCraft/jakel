@@ -59,7 +59,7 @@ public class Fireball {
         new BlockPos((int) entity.posX, (int) entity.posY, (int) entity.posZ), 0);
   }
 
-  private static void bigFireball(EntityLivingBase entity, World world, EntityLivingBase target) {
+  public static void bigFireball(EntityLivingBase entity, World world, EntityLivingBase target) {
     Vec3d vec3d = entity.getLook(1.0F);
     double d2 = target.posX - (entity.posX + vec3d.x * 4.0D);
     double d3 =
