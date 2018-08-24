@@ -1,5 +1,6 @@
 package net.torocraft.jakel;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -12,6 +13,8 @@ import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -51,69 +54,63 @@ public class JakelCommand extends CommandBase {
     String command = args[0];
 
     switch (command) {
-      case "spawn":
-        spawn(sender, args);
+      case "enchant":
+        enchant(sender, args);
         return;
       default:
         throw new WrongUsageException("commands.jakel.usage");
     }
   }
 
-  private void spawn(ICommandSender sender, @Nonnull String[] args) throws CommandException {
+  private void enchant(ICommandSender sender, @Nonnull String[] args) throws CommandException {
     if (!(sender instanceof EntityPlayer)) {
       return;
     }
 
-    if (args.length != 4) {
-      throw new WrongUsageException("commands.jakel.spawn");
-    }
+    EntityPlayer player = (EntityPlayer) sender;
 
-    EntityPlayer player = getCommandSenderAsPlayer(sender);
-    World world = player.world;
-
-    EntityCreature entity = SpawnApi.getEntityFromString(world, args[1]);
-
-    if (entity == null) {
-      throw new WrongUsageException("commands.jakel.spawn");
-    }
-
-    Type traitType;
-    try {
-      traitType = Type.valueOf(args[2]);
-    } catch (Exception e) {
-      throw new WrongUsageException("commands.jakel.spawn");
-    }
-
-    Trait trait = new Trait(traitType, i(args[3]));
-    TraitApi.applyTrait(entity, trait);
-    SpawnApi.spawnEntityCreature(world, entity, player.getPosition(), 10);
+    logHotBarItems(player);
   }
 
-  private int i(String s) {
-    try {
-      return MathHelper.clamp(Integer.valueOf(s, 10), 1, 10);
-    } catch (Exception e) {
-      return 1;
+  private void logHotBarItems(EntityPlayer player) {
+    InventoryPlayer inv = player.inventory;
+    for (int i = 0; i < inv.getSizeInventory(); i++) {
+      if (InventoryPlayer.isHotbar(i)) {
+        ItemStack stack = inv.getStackInSlot(i);
+        System.out.println(stack.getDisplayName() + " NBT: " + stack.getTagCompound());
+      }
     }
   }
+
+  private List<ItemStack> getHotBarItems(EntityPlayer player) {
+    InventoryPlayer inv = player.inventory;
+    List<ItemStack> items = new ArrayList<>();
+    for (int i = 0; i < inv.getSizeInventory(); i++) {
+      if (InventoryPlayer.isHotbar(i)) {
+        items.add(inv.getStackInSlot(i));
+      }
+    }
+    return items;
+  }
+
 
   @Override
   @Nonnull
   public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender,
       String[] args, @Nullable BlockPos targetPos) {
     if (args.length == 1) {
-      return getListOfStringsMatchingLastWord(args, "spawn");
+      return getListOfStringsMatchingLastWord(args, "enchant");
     }
     String command = args[0];
     switch (command) {
-      case "spawn":
-        return tabCompletionsForSpawn(args);
+      case "enchant":
+        return tabCompletionsForEnchant(args);
       default:
         return Collections.emptyList();
     }
   }
 
-  private List<String> tabCompletionsForSpawn(String[] args) {
+  private List<String> tabCompletionsForEnchant(String[] args) {
     if (args.length == 2) {
       return getListOfStringsMatchingLastWord(args, EntityList.getEntityNameList());
     }
