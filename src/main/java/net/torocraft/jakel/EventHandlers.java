@@ -30,7 +30,7 @@ public class EventHandlers {
     }
     EntityLivingBase entity = event.getEntityLiving();
     World world = entity.world;
-    AttackApi.largeFireBall(world, AttackApi.inFrontOf(entity), entity.getLookVec().scale(50), 3);
+    AttackApi.largeFireBall(world, AttackApi.inFrontOf(entity), entity.getLookVec().scale(50), 1);
   }
 
   @SubscribeEvent
