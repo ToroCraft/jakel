@@ -15,6 +15,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.torocraft.jakel.api.AttackApi;
 import net.torocraft.jakel.traits.TraitDistributor;
 import net.torocraft.jakel.traits.logic.Fireball;
 import net.torocraft.jakel.traits.logic.Greedy;
@@ -24,19 +25,12 @@ public class EventHandlers {
 
   @SubscribeEvent
   public static void handleMagicalWeapon(RightClickItem event) {
-
-    System.out.println("use magical weapon");
-
+    if (event.getWorld().isRemote) {
+      return;
+    }
     EntityLivingBase entity = event.getEntityLiving();
     World world = entity.world;
-
-    Vec3d lookVector = entity.getLook(1.0F);
-
-
-    EntityLargeFireball fireball = new EntityLargeFireball(world, entity.posX, entity.posY, entity.posZ, lookVector.x * 2, lookVector.y *2, lookVector.z*2);
-    fireball.explosionPower = 2;
-    world.spawnEntity(fireball);
-    world.playEvent(null, 1016, new BlockPos(entity), 0);
+    AttackApi.largeFireBall(world, AttackApi.inFrontOf(entity), entity.getLookVec().scale(50), 3);
   }
 
   @SubscribeEvent
