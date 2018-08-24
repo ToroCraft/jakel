@@ -1,0 +1,16 @@
+[
+{
+  "modid": "jakel",
+  "name": "Jakel",
+  "description": "Diablo style loot / combat system for Minecraft",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["ToroCraft"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

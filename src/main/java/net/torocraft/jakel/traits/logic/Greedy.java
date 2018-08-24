@@ -1,0 +1,69 @@
+package net.torocraft.jakel.traits.logic;
+
+import java.util.List;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Items;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.torocraft.jakel.Jakel;
+import net.torocraft.jakel.api.BehaviorApi;
+import net.torocraft.jakel.network.MessageWorshipAnimation;
+
+public class Greedy {
+
+  public static void onUpdate(EntityLiving entity, int level) {
+    if (BehaviorApi.isWorshiping(entity)) {
+      if (entity.getEntityData().getInteger(Jakel.NBT_WORSHIP_COOLDOWN) >= 0) {
+        TargetPoint point = new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ,
+            100);
+        Jakel.NETWORK
+            .sendToAllAround(new MessageWorshipAnimation(entity.getEntityId()), point);
+        return;
+      }
+      BehaviorApi.stopWorshiping(entity);
+    }
+
+    if (BehaviorApi
+        .stealAndWorshipItem(entity, getShiniesWithinAABB(entity, 1.0D, 0.0D, 1.0D), level)) {
+      return;
+    }
+
+    int distractDistance = 20;
+    EntityItem shiny = getVisibleItem(entity,
+        getShiniesWithinAABB(entity, distractDistance, distractDistance, distractDistance));
+    if (shiny != null) {
+      entity.setAttackTarget(null);
+      BehaviorApi.moveToItem(entity, shiny);
+    }
+
+  }
+
+  private static List<EntityItem> getShiniesWithinAABB(EntityLiving entity, double x, double y,
+      double z) {
+    return entity.world.getEntitiesWithinAABB(EntityItem.class,
+        new AxisAlignedBB(entity.getPosition()).grow(x, y, z),
+        item -> item.getItem().getItem().equals(Items.GOLD_INGOT) || item.getItem().getItem()
+            .equals(Items.EMERALD) || item.getItem()
+            .getItem().equals(Items.DIAMOND));
+  }
+
+  public static void decrementCooldown(EntityLiving entity) {
+    if (!entity.getEntityData().hasKey(Jakel.NBT_WORSHIP_COOLDOWN)) {
+      return;
+    }
+    entity.getEntityData()
+        .setInteger(Jakel.NBT_WORSHIP_COOLDOWN,
+            entity.getEntityData().getInteger(Jakel.NBT_WORSHIP_COOLDOWN) - 1);
+  }
+
+  public static EntityItem getVisibleItem(EntityLiving entity, List<EntityItem> desiredItems) {
+    for (EntityItem item : desiredItems) {
+      if (entity.getEntitySenses().canSee(item)) {
+        return item;
+      }
+    }
+
+    return null;
+  }
+}
