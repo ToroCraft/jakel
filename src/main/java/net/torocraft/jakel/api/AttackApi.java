@@ -13,8 +13,6 @@ public class AttackApi {
     return null;
   }
 
-  public static boolean isMagicalItem
-
   public static Vec3d inFrontOf(EntityLivingBase entity, double distance) {
     Vec3d start = entity.getPositionVector().add(new Vec3d(0d, (double)entity.getEyeHeight(), 0d));
     return entity.getLookVec().scale(distance).add(start);
