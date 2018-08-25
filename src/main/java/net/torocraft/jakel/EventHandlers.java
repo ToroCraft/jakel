@@ -28,6 +28,15 @@ public class EventHandlers {
     if (event.getWorld().isRemote) {
       return;
     }
+
+    // check if magical
+
+    // get magical skill
+
+    // check cooldown / cost
+
+    // reset cooldown or subtract mana
+
     EntityLivingBase entity = event.getEntityLiving();
     World world = entity.world;
     AttackApi.largeFireBall(world, AttackApi.inFrontOf(entity), entity.getLookVec().scale(50), 1);

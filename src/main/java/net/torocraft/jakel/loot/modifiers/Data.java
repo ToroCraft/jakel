@@ -1,5 +1,6 @@
 package net.torocraft.jakel.loot.modifiers;
 
+import net.torocraft.jakel.loot.modifiers.Modifier.Type;
 import net.torocraft.jakel.nbt.NbtField;
 
 public class Data {
