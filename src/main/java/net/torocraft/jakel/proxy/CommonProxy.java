@@ -2,17 +2,20 @@ package net.torocraft.jakel.proxy;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.torocraft.jakel.loot.capability.CapabilityPlayerData;
 import net.torocraft.jakel.network.MessageHealAnimation;
 import net.torocraft.jakel.network.MessageReflectDamageAnimation;
 import net.torocraft.jakel.network.MessageWorshipAnimation;
+import net.torocraft.jakel.util.NullStorage;
 
 public class CommonProxy {
 
   public void preInit(FMLPreInitializationEvent e) {
-
+    CapabilityManager.INSTANCE.register(CapabilityPlayerData.class, new NullStorage<>(), CapabilityPlayerData::new);
   }
 
   public void init(FMLInitializationEvent e) {
