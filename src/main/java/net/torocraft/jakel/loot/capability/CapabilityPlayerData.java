@@ -61,11 +61,9 @@ public class CapabilityPlayerData implements INBTSerializable<NBTTagCompound> {
 
   @SubscribeEvent
   public static void onPlayerCloneEvent(PlayerEvent.Clone event) {
-
     CapabilityPlayerData newData = CapabilityPlayerData.get(event.getEntityPlayer());
     CapabilityPlayerData oldData = CapabilityPlayerData.get(event.getOriginal());
-    // TODO
-    //newData.copyFrom(oldData, event.isWasDeath());
+    newData.deserializeNBT(oldData.serializeNBT());
   }
 
   @SubscribeEvent
@@ -75,7 +73,7 @@ public class CapabilityPlayerData implements INBTSerializable<NBTTagCompound> {
     }
     EntityPlayer player = (EntityPlayer) event.getEntityLiving();
     if (get(player) != null) {
-      CapabilityPlayerData.get(player).data.update();
+      CapabilityPlayerData.get(player).data.update(event);
     }
   }
 
