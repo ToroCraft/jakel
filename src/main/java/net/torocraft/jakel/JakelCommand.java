@@ -10,19 +10,13 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
-import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
 import net.torocraft.jakel.api.EnchantApi;
-import net.torocraft.jakel.api.SpawnApi;
-import net.torocraft.jakel.api.TraitApi;
-import net.torocraft.jakel.traits.Trait;
 import net.torocraft.jakel.traits.Type;
 
 public class JakelCommand extends CommandBase {
@@ -70,7 +64,6 @@ public class JakelCommand extends CommandBase {
 
     EntityPlayer player = (EntityPlayer) sender;
 
-
     ItemStack firstItem = getHotBarItems(player).get(0);
 
     EnchantApi.enchant(firstItem);
@@ -92,9 +85,10 @@ public class JakelCommand extends CommandBase {
     InventoryPlayer inv = player.inventory;
     List<ItemStack> items = new ArrayList<>();
     for (int i = 0; i < inv.getSizeInventory(); i++) {
-      if (InventoryPlayer.isHotbar(i)) {
-        items.add(inv.getStackInSlot(i));
-      }
+
+      items.add(inv.getStackInSlot(i));
+
+
     }
     return items;
   }

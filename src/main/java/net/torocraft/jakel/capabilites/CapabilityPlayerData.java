@@ -1,4 +1,4 @@
-package net.torocraft.jakel.loot.capability;
+package net.torocraft.jakel.capabilites;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,11 +10,13 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.torocraft.jakel.Jakel;
+import net.torocraft.jakel.loot.PlayerData;
 import net.torocraft.jakel.nbt.NbtSerializer;
 
 @Mod.EventBusSubscriber
@@ -25,17 +27,13 @@ public class CapabilityPlayerData implements INBTSerializable<NBTTagCompound> {
   @CapabilityInject(CapabilityPlayerData.class)
   private static final Capability<CapabilityPlayerData> PLAYER_DATA_CAPABILITY = null;
 
-  private final PlayerData data;
+  private final PlayerData data = new PlayerData();
 
-  public CapabilityPlayerData() {
-    this(null);
+  public static PlayerData get(EntityPlayer player) {
+    return getCapability(player).data;
   }
 
-  public CapabilityPlayerData(EntityPlayer player) {
-    this.data = new PlayerData(player);
-  }
-
-  public static CapabilityPlayerData get(EntityPlayer player) {
+  public static CapabilityPlayerData getCapability(EntityPlayer player) {
     return player.getCapability(PLAYER_DATA_CAPABILITY, null);
   }
 
@@ -55,14 +53,25 @@ public class CapabilityPlayerData implements INBTSerializable<NBTTagCompound> {
   public static void onCapabilityLoad(AttachCapabilitiesEvent<Entity> event) {
     if (event.getObject() instanceof EntityPlayer) {
       EntityPlayer player = (EntityPlayer) event.getObject();
-      event.addCapability(RESOURCE, new Provider(player));
+      event.addCapability(RESOURCE, new Provider());
+    }
+  }
+
+  @SubscribeEvent
+  public static void onEquipmentChange(LivingEquipmentChangeEvent event) {
+    if (event.getEntity().world.isRemote) {
+      return;
+    }
+    if (event.getEntity() instanceof EntityPlayer) {
+      EntityPlayer player = (EntityPlayer) event.getEntity();
+      get(player).onEquipmentChange(player);
     }
   }
 
   @SubscribeEvent
   public static void onPlayerCloneEvent(PlayerEvent.Clone event) {
-    CapabilityPlayerData newData = CapabilityPlayerData.get(event.getEntityPlayer());
-    CapabilityPlayerData oldData = CapabilityPlayerData.get(event.getOriginal());
+    CapabilityPlayerData newData = getCapability(event.getEntityPlayer());
+    CapabilityPlayerData oldData = getCapability(event.getOriginal());
     newData.deserializeNBT(oldData.serializeNBT());
   }
 
@@ -73,7 +82,7 @@ public class CapabilityPlayerData implements INBTSerializable<NBTTagCompound> {
     }
     EntityPlayer player = (EntityPlayer) event.getEntityLiving();
     if (get(player) != null) {
-      CapabilityPlayerData.get(player).data.update(event);
+      CapabilityPlayerData.get(player).update(event);
     }
   }
 
@@ -81,8 +90,8 @@ public class CapabilityPlayerData implements INBTSerializable<NBTTagCompound> {
 
     private final CapabilityPlayerData data;
 
-    public Provider(EntityPlayer player) {
-      data = new CapabilityPlayerData(player);
+    public Provider() {
+      data = new CapabilityPlayerData();
     }
 
     @Override
