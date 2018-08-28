@@ -2,25 +2,19 @@ package net.torocraft.jakel.api;
 
 import java.util.ArrayList;
 import net.minecraft.item.ItemStack;
-import net.torocraft.jakel.loot.Element;
-import net.torocraft.jakel.loot.WeaponAttributes;
-import net.torocraft.jakel.loot.WeaponAttributes.AttackType;
+import net.torocraft.jakel.capabilites.CapabilityItemData;
+import net.torocraft.jakel.loot.ItemData;
 import net.torocraft.jakel.loot.modifiers.Data;
 import net.torocraft.jakel.loot.modifiers.Modifier;
-import net.torocraft.jakel.nbt.NbtSerializer;
 
 public class EnchantApi {
 
   public static void enchant(ItemStack item) {
-
-    WeaponAttributes attributes = new WeaponAttributes();
-    attributes.damageType = Element.FIRE;
-    attributes.type = AttackType.LARGE_FIREBALL;
-    attributes.modifiers = new ArrayList<>();
-    attributes.modifiers.add(new Data(Modifier.Type.FIRE, 5));
-    attributes.modifiers.add(new Data(Modifier.Type.FIRE_RESIST, 10));
-
-    NbtSerializer.write(item.getOrCreateSubCompound("jakel"), attributes);
+    ItemData data = CapabilityItemData.get(item);
+    data.modifiers = new ArrayList<>();
+    data.modifiers.add(new Data(Modifier.Type.FIRE, 5));
+    data.modifiers.add(new Data(Modifier.Type.FIRE_RESIST, 10));
+    data.isMagicalConduit = true;
   }
 
 }

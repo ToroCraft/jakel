@@ -41,18 +41,19 @@ public class CapabilityItemData implements INBTSerializable<NBTTagCompound> {
   public NBTTagCompound serializeNBT() {
     NBTTagCompound c = new NBTTagCompound();
     NbtSerializer.write(c, data);
+    System.out.println("save " + c);
     return c;
   }
 
   @Override
   public void deserializeNBT(NBTTagCompound c) {
+    System.out.println("read " + c);
     NbtSerializer.read(c, data);
   }
 
   @SubscribeEvent
   public static void onCapabilityLoad(AttachCapabilitiesEvent<ItemStack> event) {
     if (isMagicCapableItem(event.getObject().getItem())) {
-      System.out.println("attaching item cap to " + event.getObject());
       event.addCapability(RESOURCE, new Provider());
     }
   }
