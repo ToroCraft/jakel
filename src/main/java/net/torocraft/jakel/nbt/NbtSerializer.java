@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagFloat;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagLong;
@@ -112,6 +113,10 @@ public class NbtSerializer {
       case "long":
         return new NBTTagLong((Long) value);
 
+      case "java.lang.Float":
+      case "float":
+        return new NBTTagFloat((Float) value);
+
       case "java.lang.Boolean":
       case "boolean":
         return new NBTTagByte((byte) (((Boolean) value) ? 1 : 0));
@@ -182,6 +187,8 @@ public class NbtSerializer {
         return ((NBTTagInt) value).getInt();
       case "net.minecraft.nbt.NBTTagLong":
         return ((NBTTagLong) value).getLong();
+      case "net.minecraft.nbt.NBTTagFloat":
+        return ((NBTTagFloat) value).getFloat();
       case "net.minecraft.nbt.NBTTagByte":
         return ((NBTTagByte) value).getByte() != 0;
       case "net.minecraft.nbt.NBTTagString":

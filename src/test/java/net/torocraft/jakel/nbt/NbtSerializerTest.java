@@ -10,6 +10,15 @@ import org.junit.Test;
 public class NbtSerializerTest {
 
   @Test
+  public void testFloat() {
+    t1.float1 = 15f;
+    t1.float2 = 23.23453f;
+    readWrite();
+    Assert.assertEquals(t1.float1, t2.float1, 0.0001);
+    Assert.assertEquals(t1.float2, t2.float2, 0.0001);
+  }
+
+  @Test
   public void testBoolTrue() {
     t1.bool1 = true;
     readWrite();
@@ -82,6 +91,12 @@ public class NbtSerializerTest {
 
     @NbtField
     boolean bool1;
+
+    @NbtField
+    float float1;
+
+    @NbtField
+    Float float2;
 
     @NbtField
     Boolean bool2;

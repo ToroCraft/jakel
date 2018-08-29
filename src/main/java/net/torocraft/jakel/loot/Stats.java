@@ -1,6 +1,8 @@
 package net.torocraft.jakel.loot;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.torocraft.jakel.nbt.NbtField;
+import net.torocraft.jakel.nbt.NbtSerializer;
 
 public class Stats {
 
@@ -60,5 +62,12 @@ public class Stats {
 
   @NbtField
   public float holyResist;
+
+  @Override
+  public String toString() {
+    NBTTagCompound c = new NBTTagCompound();
+    NbtSerializer.write(c, this);
+    return c.toString();
+  }
 
 }

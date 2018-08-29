@@ -30,7 +30,8 @@ public class CapabilityItemData implements INBTSerializable<NBTTagCompound> {
   private final ItemData data = new ItemData();
 
   public static ItemData get(ItemStack stack) {
-    return getCapability(stack).data;
+    CapabilityItemData cap = getCapability(stack);
+    return cap == null ? null : cap.data;
   }
 
   public static CapabilityItemData getCapability(ItemStack stack) {
@@ -41,13 +42,11 @@ public class CapabilityItemData implements INBTSerializable<NBTTagCompound> {
   public NBTTagCompound serializeNBT() {
     NBTTagCompound c = new NBTTagCompound();
     NbtSerializer.write(c, data);
-    System.out.println("save " + c);
     return c;
   }
 
   @Override
   public void deserializeNBT(NBTTagCompound c) {
-    System.out.println("read " + c);
     NbtSerializer.read(c, data);
   }
 
@@ -89,6 +88,8 @@ public class CapabilityItemData implements INBTSerializable<NBTTagCompound> {
 
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+      System.out.println("c******cap" + capability);
+      System.out.println("c******data" + data);
       if (capability == CAPABILITY) {
         return CAPABILITY.cast(data);
       }

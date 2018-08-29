@@ -30,7 +30,8 @@ public class CapabilityPlayerData implements INBTSerializable<NBTTagCompound> {
   private final PlayerData data = new PlayerData();
 
   public static PlayerData get(EntityPlayer player) {
-    return getCapability(player).data;
+    CapabilityPlayerData cap = getCapability(player);
+    return cap == null ? null : cap.data;
   }
 
   public static CapabilityPlayerData getCapability(EntityPlayer player) {

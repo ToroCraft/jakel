@@ -6,6 +6,10 @@ import net.torocraft.jakel.loot.Stats;
 public interface Modifier {
 
   enum Type {
+    DAMAGE((stats, data) -> {
+      stats.damage += data.amount;
+    }),
+
     FIRE((stats, data) -> {
       stats.fire += data.amount;
     }),
