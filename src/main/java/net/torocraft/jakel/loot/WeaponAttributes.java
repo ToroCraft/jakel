@@ -1,7 +1,6 @@
 package net.torocraft.jakel.loot;
 
 import java.util.List;
-import net.torocraft.jakel.loot.modifiers.Data;
 import net.torocraft.jakel.nbt.NbtField;
 
 public class WeaponAttributes {
@@ -14,7 +13,7 @@ public class WeaponAttributes {
   @NbtField
   public Element damageType;
 
-  @NbtField(genericType = Data.class)
-  public List<Data> modifiers;
+  @NbtField(genericType = Modifier.class)
+  public List<Modifier> modifiers;
 
 }

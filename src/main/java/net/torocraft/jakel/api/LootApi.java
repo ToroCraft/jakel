@@ -1,13 +1,11 @@
 package net.torocraft.jakel.api;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.projectile.EntityLargeFireball;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.torocraft.jakel.capabilites.CapabilityItemData;
+import net.torocraft.jakel.loot.ItemData;
+import net.torocraft.jakel.loot.Stats;
 
 public class LootApi {
 
@@ -25,4 +23,17 @@ public class LootApi {
   }
 
 
+  private static boolean isMagicalItem(ItemData data) {
+    return data != null;
+  }
+
+  public static void applyItem(ItemStack item, Stats stats) {
+    applyItem(CapabilityItemData.get(item), stats);
+  }
+
+  public static void applyItem(ItemData item, Stats stats) {
+    if (isMagicalItem(item) && item.modifiers != null) {
+      item.modifiers.forEach(m -> m.apply(stats));
+    }
+  }
 }
