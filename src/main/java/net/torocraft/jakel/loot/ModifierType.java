@@ -26,37 +26,44 @@ public enum ModifierType {
     stats.holy += amount;
   }),
 
-  XP((stats, amount) -> {
-  }),
-
   MOVEMENT_SPEED((stats, amount) -> {
+
   }),
 
   JUMP((stats, amount) -> {
+
   }),
 
   HP((stats, amount) -> {
+
   }),
 
   REGEN((stats, amount) -> {
+
   }),
 
   DEFENSE((stats, amount) -> {
+    stats.defense += amount;
   }),
 
   INCREASED_XP_GAIN((stats, amount) -> {
+
   }),
 
   CRITICAL_HIT_CHANCE((stats, amount) -> {
+    stats.criticalHitChance += amount;
   }),
 
   CRITICAL_HIT_DAMAGE((stats, amount) -> {
+    stats.criticalHitDamage += amount;
   }),
 
   SOCKET((stats, amount) -> {
+
   }),
 
   MANA_COST((stats, amount) -> {
+
   }),
 
   FIRE_RESIST((stats, amount) -> {
@@ -64,30 +71,38 @@ public enum ModifierType {
   }),
 
   WITHER_RESIST((stats, amount) -> {
+    stats.witherResist += toPercent(amount);
   }),
 
   LIGHTNING_RESIST((stats, amount) -> {
+    stats.lightningResist += toPercent(amount);
   }),
 
   COLD_RESIST((stats, amount) -> {
+    stats.coldResist += toPercent(amount);
   }),
 
   HOLY_RESIST((stats, amount) -> {
+    stats.holyResist += toPercent(amount);
   }),
 
   CONTROL_IMPAIRMENT((stats, amount) -> {
   }),
 
   ATTACK_SPEED((stats, amount) -> {
+
   }),
 
   AREA_DAMAGE((stats, amount) -> {
+    stats.areaDamage += amount;
   }),
 
   LIFE_PER_HIT((stats, amount) -> {
+    stats.lifePerHit += amount;
   }),
 
   LIFE_PER_KILL((stats, amount) -> {
+    stats.lifePerKill += amount;
   }),
 
   THORNS((stats, amount) -> {

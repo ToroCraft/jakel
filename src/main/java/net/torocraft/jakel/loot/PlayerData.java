@@ -35,7 +35,7 @@ public class PlayerData {
     InventoryPlayer inv = player.inventory;
     List<ItemStack> items = new ArrayList<>();
 
-    Stats stats = CapabilityPlayerData.get(player).stats;
+    Stats stats = new Stats();
     for (ItemStack item : inv.armorInventory) {
       LootApi.applyItem(item, stats);
     }
@@ -45,6 +45,10 @@ public class PlayerData {
     }
 
     LootApi.applyItem(inv.mainInventory.get(inv.currentItem), stats);
+
+    System.out.println(stats);
+
+    CapabilityPlayerData.get(player).stats = stats;
   }
 
 }

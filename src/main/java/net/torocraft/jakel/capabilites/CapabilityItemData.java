@@ -88,8 +88,6 @@ public class CapabilityItemData implements INBTSerializable<NBTTagCompound> {
 
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-      System.out.println("c******cap" + capability);
-      System.out.println("c******data" + data);
       if (capability == CAPABILITY) {
         return CAPABILITY.cast(data);
       }
