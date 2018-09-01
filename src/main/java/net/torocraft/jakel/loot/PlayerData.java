@@ -24,10 +24,25 @@ public class PlayerData {
     mana = 0;
   }
 
+  // add tooltip to magical items
+
+  // remove magical items left right click when spell is slotted in the corresponding hot bar slot
+
+  // create spell item and inventory
+
   public void update(LivingUpdateEvent event) {
     if (event.getEntity().world.getTotalWorldTime() % 100 != 0) {
       return;
     }
+
+    // keep cool downs by inventory slot in hot bar, 5 to 8
+
+    // spells will have two inventory slots each, a rune and passive skill
+
+    // only armor can change player stats, spells will only be able affect that one spell
+
+    // scan through items, handle cool downs, sync data to client on important change
+
     mana++;
   }
 
@@ -49,6 +64,7 @@ public class PlayerData {
     System.out.println(stats);
 
     CapabilityPlayerData.get(player).stats = stats;
+    return false;
   }
 
 }

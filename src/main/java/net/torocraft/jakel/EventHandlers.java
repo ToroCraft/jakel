@@ -4,14 +4,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityLargeFireball;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
@@ -21,7 +17,6 @@ import net.torocraft.jakel.api.AttackApi;
 import net.torocraft.jakel.capabilites.CapabilityPlayerData;
 import net.torocraft.jakel.loot.Stats;
 import net.torocraft.jakel.traits.TraitDistributor;
-import net.torocraft.jakel.traits.logic.Fireball;
 import net.torocraft.jakel.traits.logic.Greedy;
 
 @Mod.EventBusSubscriber(modid = Jakel.MODID)
@@ -37,7 +32,6 @@ public class EventHandlers {
 
     ItemStack stack = event.getItemStack();
 
-
     // get magical skill
 
     // check cooldown / cost
@@ -48,13 +42,11 @@ public class EventHandlers {
     World world = entity.world;
 
     if (entity instanceof EntityPlayer) {
-      Stats stats = CapabilityPlayerData.get((EntityPlayer)entity).stats;
+      Stats stats = CapabilityPlayerData.get((EntityPlayer) entity).stats;
 
-      ((EntityPlayer)entity).getCooldownTracker().setCooldown(stack.getItem(), 20);
+      ((EntityPlayer) entity).getCooldownTracker().setCooldown(stack.getItem(), 20);
 
-      System.out.println(stats);
     }
-
 
     AttackApi.largeFireBall(world, AttackApi.inFrontOf(entity), entity.getLookVec().scale(50), 1);
   }
