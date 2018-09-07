@@ -8,8 +8,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -22,15 +24,32 @@ import net.torocraft.jakel.traits.logic.Greedy;
 @Mod.EventBusSubscriber(modid = Jakel.MODID)
 public class EventHandlers {
 
+  //RightClickBlock} or entity {@link EntityInteract} {@link EntityInteractSpecific
+
+//
+//  @SubscribeEvent
+//  public static void handleMagicalWeapon(RightClickItem event) {
+//    handleMagicalWeapon(event, event.getItemStack());
+//  }
+
   @SubscribeEvent
-  public static void handleMagicalWeapon(RightClickItem event) {
-    if (event.getWorld().isRemote) {
+  public static void handleMagicalWeapon(PlayerInteractEvent event) {
+    handleMagicalWeapon(event, event.getItemStack());
+  }
+
+  private static void handleMagicalWeapon(LivingEvent event, ItemStack stack) {
+
+    if (event.getEntityLiving().world.isRemote) {
       return;
     }
 
-    // check if magical
+    if (!isMagicalWeapon(stack)) {
+      return;
+    }
 
-    ItemStack stack = event.getItemStack();
+    System.out.println("**** event: " + event.getClass().getName());
+
+    //ItemStack stack = event.getItemStack();
 
     // get magical skill
 
@@ -48,8 +67,22 @@ public class EventHandlers {
 
     }
 
+    event.setCanceled(true);
+
     AttackApi.largeFireBall(world, AttackApi.inFrontOf(entity), entity.getLookVec().scale(50), 1);
   }
+
+  private static boolean isMagicalWeapon(ItemStack stack) {
+    if (stack == null || stack.isEmpty()) {
+      return false;
+    }
+    // TODO check cap, must be a magical conduit
+
+    //CapabilityItemData.get(stack).isMagicalConduit;
+
+    return true;
+  }
+
 
   @SubscribeEvent
   public static void livingUpdate(LivingUpdateEvent event) {

@@ -64,7 +64,6 @@ public class PlayerData {
     System.out.println(stats);
 
     CapabilityPlayerData.get(player).stats = stats;
-    return false;
   }
 
 }
