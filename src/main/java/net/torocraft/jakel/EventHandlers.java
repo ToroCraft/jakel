@@ -24,24 +24,14 @@ import net.torocraft.jakel.traits.logic.Greedy;
 @Mod.EventBusSubscriber(modid = Jakel.MODID)
 public class EventHandlers {
 
-  //RightClickBlock} or entity {@link EntityInteract} {@link EntityInteractSpecific
-
-//
-//  @SubscribeEvent
-//  public static void handleMagicalWeapon(RightClickItem event) {
-//    handleMagicalWeapon(event, event.getItemStack());
-//  }
-
-  @SubscribeEvent
-  public static void handleMagicalWeapon(PlayerInteractEvent event) {
-    handleMagicalWeapon(event, event.getItemStack());
-  }
-
   private static void handleMagicalWeapon(LivingEvent event, ItemStack stack) {
+    // TODO replace this with a network packet sent from the client
 
     if (event.getEntityLiving().world.isRemote) {
-      return;
+      // return;
     }
+
+    System.out.println("**** PRE item check event: " + event.getClass().getName());
 
     if (!isMagicalWeapon(stack)) {
       return;
@@ -67,7 +57,9 @@ public class EventHandlers {
 
     }
 
-    event.setCanceled(true);
+    if (event.isCancelable()) {
+      event.setCanceled(true);
+    }
 
     AttackApi.largeFireBall(world, AttackApi.inFrontOf(entity), entity.getLookVec().scale(50), 1);
   }
