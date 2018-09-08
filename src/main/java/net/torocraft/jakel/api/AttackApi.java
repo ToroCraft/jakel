@@ -14,8 +14,13 @@ public class AttackApi {
   }
 
   public static Vec3d inFrontOf(EntityLivingBase entity, double distance) {
-    Vec3d start = entity.getPositionVector().add(new Vec3d(0d, (double)entity.getEyeHeight(), 0d));
-    return entity.getLookVec().scale(distance).add(start);
+    Vec3d pos = entity.getPositionVector().add(new Vec3d(0d, (double)entity.getEyeHeight(), 0d));
+    Vec3d look = entity.getLookVec();
+    return inFrontOf(pos, look, distance);
+  }
+
+  public static Vec3d inFrontOf(Vec3d pos, Vec3d look, double distance) {
+    return look.scale(distance).add(pos);
   }
 
   public static Vec3d inFrontOf(EntityLivingBase entity) {

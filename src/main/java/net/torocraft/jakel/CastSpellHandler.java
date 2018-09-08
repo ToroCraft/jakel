@@ -1,9 +1,12 @@
-package net.torocraft.jakel.util.extendedreach;
+package net.torocraft.jakel;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -11,17 +14,17 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.torocraft.jakel.Jakel;
 import net.torocraft.jakel.api.LootApi;
 import net.torocraft.jakel.api.LootApi.SpellSlot;
+import net.torocraft.jakel.network.MessageCastSpell;
 import net.torocraft.jakel.util.RayTraceUtil;
 import org.lwjgl.input.Keyboard;
 
 @Mod.EventBusSubscriber(modid = Jakel.MODID)
-public class ExtendedReachHandler {
+public class CastSpellHandler {
 
   public static void init() {
-    MinecraftForge.EVENT_BUS.register(new ExtendedReachHandler());
+    MinecraftForge.EVENT_BUS.register(new CastSpellHandler());
   }
 
   private static SpellSlot determineSpellSlot(int button, boolean ctrl) {
@@ -54,7 +57,7 @@ public class ExtendedReachHandler {
 
     if (!LootApi.isMagicalConduit(stack)) {
       System.out.println("Not a magical conduit " + stack);
-      return;
+      //return;
     }
 
     boolean ctrl =  Keyboard.isKeyDown(Keyboard.KEY_LCONTROL);
@@ -69,36 +72,23 @@ public class ExtendedReachHandler {
 
     RayTraceResult rayTrace = RayTraceUtil.getMouseOverExtended(50);
 
-    // TODO create network packet to send cast spell command, direction, and ray trace result
+    Vec3d pos = player.getPositionVector().add(new Vec3d(0d, (double)player.getEyeHeight(), 0d));
+    Vec3d look = player.getLookVec();
+    MessageCastSpell message;
 
-    // TODO move this out of extended reach and into a handle magical spell method
-
-    if (rayTrace == null) {
-      System.out.println("rayTrace FAILED");
-      return;
+    if (rayTrace != null) {
+      if (rayTrace.entityHit != null) {
+        message = new MessageCastSpell(rayTrace.entityHit.getEntityId(), pos, look);
+      } else if (RayTraceResult.Type.BLOCK.equals(rayTrace.typeOfHit)) {
+        message = new MessageCastSpell(rayTrace.getBlockPos(), pos, look);
+      } else {
+        message = new MessageCastSpell(pos, look);
+      }
+    } else {
+      message = new MessageCastSpell(pos, look);
     }
 
-    if (rayTrace.entityHit != null) {
-//      Jakel.NETWORK.sendToServer(new MessageExtendedReachInteract(rayTrace.entityHit.getEntityId()));
-//
-//      /*
-//       * send to client
-//       */
-//      ((IExtendedReach) (stack.getItem())).itemInteractionForEntityExtended(stack, player, (EntityLivingBase) rayTrace.entityHit,
-//          EnumHand.MAIN_HAND);
-      System.out.println("hit entity");
-    } else if (RayTraceResult.Type.BLOCK.equals(rayTrace.typeOfHit)) {
-//      Jakel.NETWORK.sendToServer(new MessageExtendedReachInteract(rayTrace.getBlockPos()));
-//
-//      /*
-//       * send to client
-//       */
-//      Vec3d vec = player.getPositionVector();
-//      ((IExtendedReach) (stack.getItem())).onItemUseExtended(player, player.world, rayTrace.getBlockPos(), EnumHand.MAIN_HAND, null,
-//          (float) vec.x, (float) vec.y, (float) vec.z);
-      System.out.println("hit block");
-    }
-
+    Jakel.NETWORK.sendToServer(message);
   }
 
 }

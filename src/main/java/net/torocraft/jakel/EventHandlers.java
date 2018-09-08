@@ -24,58 +24,6 @@ import net.torocraft.jakel.traits.logic.Greedy;
 @Mod.EventBusSubscriber(modid = Jakel.MODID)
 public class EventHandlers {
 
-  private static void handleMagicalWeapon(LivingEvent event, ItemStack stack) {
-    // TODO replace this with a network packet sent from the client
-
-    if (event.getEntityLiving().world.isRemote) {
-      // return;
-    }
-
-    System.out.println("**** PRE item check event: " + event.getClass().getName());
-
-    if (!isMagicalWeapon(stack)) {
-      return;
-    }
-
-    System.out.println("**** event: " + event.getClass().getName());
-
-    //ItemStack stack = event.getItemStack();
-
-    // get magical skill
-
-    // check cooldown / cost
-
-    // reset cooldown or subtract mana
-
-    EntityLivingBase entity = event.getEntityLiving();
-    World world = entity.world;
-
-    if (entity instanceof EntityPlayer) {
-      Stats stats = CapabilityPlayerData.get((EntityPlayer) entity).stats;
-
-      ((EntityPlayer) entity).getCooldownTracker().setCooldown(stack.getItem(), 20);
-
-    }
-
-    if (event.isCancelable()) {
-      event.setCanceled(true);
-    }
-
-    AttackApi.largeFireBall(world, AttackApi.inFrontOf(entity), entity.getLookVec().scale(50), 1);
-  }
-
-  private static boolean isMagicalWeapon(ItemStack stack) {
-    if (stack == null || stack.isEmpty()) {
-      return false;
-    }
-    // TODO check cap, must be a magical conduit
-
-    //CapabilityItemData.get(stack).isMagicalConduit;
-
-    return true;
-  }
-
-
   @SubscribeEvent
   public static void livingUpdate(LivingUpdateEvent event) {
     if (event.getEntity().world.getTotalWorldTime() % 20 != 0) {

@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.torocraft.jakel.capabilites.CapabilityItemData;
 import net.torocraft.jakel.capabilites.CapabilityPlayerData;
+import net.torocraft.jakel.network.MessageCastSpell;
 import net.torocraft.jakel.network.MessageHealAnimation;
 import net.torocraft.jakel.network.MessageReflectDamageAnimation;
 import net.torocraft.jakel.network.MessageWorshipAnimation;
@@ -33,6 +34,7 @@ public class CommonProxy {
     MessageHealAnimation.init(packetId++);
     MessageReflectDamageAnimation.init(packetId++);
     MessageWorshipAnimation.init(packetId++);
+    MessageCastSpell.init(packetId++);
   }
 
   public void openGui(int modGuiId) {
