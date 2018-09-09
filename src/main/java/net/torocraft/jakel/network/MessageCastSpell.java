@@ -9,6 +9,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.torocraft.jakel.Jakel;
+import net.torocraft.jakel.api.LootApi.SpellSlot;
 
 public class MessageCastSpell implements IMessage {
 
@@ -16,6 +17,7 @@ public class MessageCastSpell implements IMessage {
   public static final int HIT_TYPE_ENTITY = 1;
   public static final int HIT_TYPE_BLOCK = 2;
 
+  public SpellSlot slot;
   public int hitType;
   public int entityId;
   public BlockPos block;
@@ -31,26 +33,30 @@ public class MessageCastSpell implements IMessage {
 
   }
 
-  public MessageCastSpell(Vec3d pos, Vec3d look) {
+  public MessageCastSpell(SpellSlot slot, Vec3d pos, Vec3d look) {
     if (pos == null) {
       throw new NullPointerException("pos is null");
     }
     if (look == null) {
       throw new NullPointerException("look is null");
     }
+    if (slot == null) {
+      throw new NullPointerException("slot is null");
+    }
     this.hitType = HIT_TYPE_NONE;
     this.pos = pos;
     this.look = look;
+    this.slot = slot;
   }
 
-  public MessageCastSpell(int parEntityId, Vec3d pos, Vec3d look) {
-    this(pos, look);
+  public MessageCastSpell(SpellSlot slot, int parEntityId, Vec3d pos, Vec3d look) {
+    this(slot, pos, look);
     this.hitType = HIT_TYPE_ENTITY;
     this.entityId = parEntityId;
   }
 
-  public MessageCastSpell(BlockPos block, Vec3d pos, Vec3d look) {
-    this(pos, look);
+  public MessageCastSpell(SpellSlot slot, BlockPos block, Vec3d pos, Vec3d look) {
+    this(slot, pos, look);
     if (block == null) {
       throw new NullPointerException("block is null");
     }
@@ -60,6 +66,7 @@ public class MessageCastSpell implements IMessage {
 
   @Override
   public void fromBytes(ByteBuf buf) {
+    slot = SpellSlot.values()[buf.readInt()];
     hitType = buf.readInt();
     pos = readVec3d(buf);
     look = readVec3d(buf);
@@ -75,6 +82,7 @@ public class MessageCastSpell implements IMessage {
 
   @Override
   public void toBytes(ByteBuf buf) {
+    buf.writeInt(slot.ordinal());
     buf.writeInt(hitType);
     writeVec3d(buf, pos);
     writeVec3d(buf, look);

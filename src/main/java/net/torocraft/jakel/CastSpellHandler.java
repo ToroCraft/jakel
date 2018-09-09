@@ -78,14 +78,14 @@ public class CastSpellHandler {
 
     if (rayTrace != null) {
       if (rayTrace.entityHit != null) {
-        message = new MessageCastSpell(rayTrace.entityHit.getEntityId(), pos, look);
+        message = new MessageCastSpell(slot, rayTrace.entityHit.getEntityId(), pos, look);
       } else if (RayTraceResult.Type.BLOCK.equals(rayTrace.typeOfHit)) {
-        message = new MessageCastSpell(rayTrace.getBlockPos(), pos, look);
+        message = new MessageCastSpell(slot, rayTrace.getBlockPos(), pos, look);
       } else {
-        message = new MessageCastSpell(pos, look);
+        message = new MessageCastSpell(slot, pos, look);
       }
     } else {
-      message = new MessageCastSpell(pos, look);
+      message = new MessageCastSpell(slot, pos, look);
     }
 
     Jakel.NETWORK.sendToServer(message);

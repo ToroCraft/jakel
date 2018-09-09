@@ -3,7 +3,9 @@ package net.torocraft.jakel.proxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.torocraft.jakel.Jakel;
+import net.torocraft.jakel.items.ItemSpell;
 
 public class ClientProxy extends CommonProxy {
 
@@ -14,6 +16,13 @@ public class ClientProxy extends CommonProxy {
         .openGui(Jakel.INSTANCE, modGuiId, player.world, (int) player.posX, (int) player.posY,
             (int) player.posZ);
   }
+
+  @Override
+  public void init(FMLInitializationEvent e) {
+    super.init(e);
+    ItemSpell.registerRenders();
+  }
+
 
   @Override
   public EntityPlayer getPlayer() {

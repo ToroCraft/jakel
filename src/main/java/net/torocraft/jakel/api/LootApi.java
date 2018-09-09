@@ -5,10 +5,10 @@ import java.util.List;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.torocraft.jakel.capabilites.CapabilityItemData;
+import net.torocraft.jakel.items.ItemSpell;
 import net.torocraft.jakel.loot.ItemData;
 import net.torocraft.jakel.loot.Stats;
 
@@ -50,17 +50,19 @@ public class LootApi {
     }
   }
 
+  public static boolean notASpell(ItemStack item) {
+    return item == null || item.isEmpty() || item.getItem() != ItemSpell.INSTANCE;
+  }
+
   public enum SpellSlot {MAIN, SECONDARY, MAIN_ALT, SECONDARY_ALT}
 
   public static ItemStack getEquippedSpell(EntityPlayer player, SpellSlot slot) {
-    // TODO check hot bar
-
     InventoryPlayer inv = player.inventory;
     List<ItemStack> items = new ArrayList<>();
     ItemStack selectedItem = inv.getStackInSlot(5 + slot.ordinal());
-
-
-    System.out.println("getEquippedSpell " + player.getName()  + " " + slot + " FOUND: " + selectedItem);
+    if (notASpell(selectedItem)){
+      return ItemStack.EMPTY;
+    }
     return selectedItem;
   }
 }
