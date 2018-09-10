@@ -1,10 +1,8 @@
 package net.torocraft.jakel;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.MouseEvent;
@@ -29,9 +27,12 @@ public class CastSpellHandler {
 
   private static SpellSlot determineSpellSlot(int button, boolean ctrl) {
     switch (button) {
-      case 0: return ctrl ? SpellSlot.MAIN_ALT : SpellSlot.MAIN;
-      case 1: return ctrl ? SpellSlot.SECONDARY_ALT : SpellSlot.SECONDARY;
-      default: return SpellSlot.MAIN;
+      case 0:
+        return ctrl ? SpellSlot.MAIN_ALT : SpellSlot.MAIN;
+      case 1:
+        return ctrl ? SpellSlot.SECONDARY_ALT : SpellSlot.SECONDARY;
+      default:
+        return SpellSlot.MAIN;
     }
   }
 
@@ -60,7 +61,7 @@ public class CastSpellHandler {
       //return;
     }
 
-    boolean ctrl =  Keyboard.isKeyDown(Keyboard.KEY_LCONTROL);
+    boolean ctrl = Keyboard.isKeyDown(Keyboard.KEY_LCONTROL);
     SpellSlot slot = determineSpellSlot(event.getButton(), ctrl);
 
     if (LootApi.getEquippedSpell(player, slot).isEmpty()) {
@@ -72,7 +73,7 @@ public class CastSpellHandler {
 
     RayTraceResult rayTrace = RayTraceUtil.getMouseOverExtended(50);
 
-    Vec3d pos = player.getPositionVector().add(new Vec3d(0d, (double)player.getEyeHeight(), 0d));
+    Vec3d pos = player.getPositionVector().add(new Vec3d(0d, (double) player.getEyeHeight(), 0d));
     Vec3d look = player.getLookVec();
     MessageCastSpell message;
 

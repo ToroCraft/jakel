@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagByte;
@@ -102,6 +103,30 @@ public class NbtSerializer {
     f.setAccessible(accessible);
   }
 
+  public static NBTTagList listFromInventory(IInventory inventory) {
+    NBTTagList list = new NBTTagList();
+    for (int i = 0; i < inventory.getSizeInventory(); ++i) {
+      ItemStack itemstack = inventory.getStackInSlot(i);
+      if (!itemstack.isEmpty()) {
+        NBTTagCompound nbttagcompound = new NBTTagCompound();
+        nbttagcompound.setByte("Slot", (byte) i);
+        itemstack.writeToNBT(nbttagcompound);
+        list.appendTag(nbttagcompound);
+      }
+    }
+    return list;
+  }
+
+  public static void listToInventory(IInventory inventory, NBTTagList list) {
+    for (int i = 0; i < list.tagCount(); ++i) {
+      NBTTagCompound nbttagcompound = list.getCompoundTagAt(i);
+      int slot = nbttagcompound.getByte("Slot") & 255;
+      if (slot >= 0 && slot < inventory.getSizeInventory()) {
+        inventory.setInventorySlotContents(slot, new ItemStack(nbttagcompound));
+      }
+    }
+  }
+
   @SuppressWarnings("unchecked")
   private static NBTBase toCompound(Object value) {
     if (value == null) {
@@ -169,6 +194,10 @@ public class NbtSerializer {
       return nbttaglist;
     }
 
+    if (value instanceof IInventory) {
+      return listFromInventory((IInventory) value);
+    }
+
     NBTTagCompound c = new NBTTagCompound();
     write(c, value);
     return c;
@@ -213,6 +242,17 @@ public class NbtSerializer {
             }
           }
           return set;
+        }
+
+        if (IInventory.class.isAssignableFrom(type)) {
+          try {
+            IInventory inventory = (IInventory) genericType.newInstance();
+            listToInventory(inventory, nbtList);
+            return inventory;
+          } catch (Exception e) {
+            System.out.println("Failed to read inventory from NBT");
+            e.printStackTrace();
+          }
         }
 
         List<Object> list;

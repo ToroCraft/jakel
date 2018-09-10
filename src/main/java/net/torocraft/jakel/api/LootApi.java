@@ -54,6 +54,10 @@ public class LootApi {
     return item == null || item.isEmpty() || item.getItem() != ItemSpell.INSTANCE;
   }
 
+  public static boolean isASpell(ItemStack item) {
+    return !notASpell(item);
+  }
+
   public enum SpellSlot {MAIN, SECONDARY, MAIN_ALT, SECONDARY_ALT}
 
   public static ItemStack getEquippedSpell(EntityPlayer player, SpellSlot slot) {
