@@ -20,8 +20,9 @@ public class GuiHandler implements IGuiHandler {
 
   @Override
   public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-    if (ID == SPELL_GUI && LootApi.isASpell(player.getHeldItem(EnumHand.MAIN_HAND))) {
+    if (ID == SPELL_GUI) {
       ItemStack spell = player.getHeldItem(EnumHand.MAIN_HAND);
+      System.out.println("got spell on server: " + CapabilitySpell.get(spell).inventory);
       return new ContainerSpell(player, CapabilitySpell.get(spell).inventory, world);
     }
     return null;
@@ -29,8 +30,9 @@ public class GuiHandler implements IGuiHandler {
 
   @Override
   public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-    if (ID == SPELL_GUI && LootApi.isASpell(player.getHeldItem(EnumHand.MAIN_HAND))) {
+    if (ID == SPELL_GUI) {
       ItemStack spell = player.getHeldItem(EnumHand.MAIN_HAND);
+      System.out.println("got spell on client: " + CapabilitySpell.get(spell).inventory);
       return new GuiContainerSpell(player, CapabilitySpell.get(spell), world);
     }
     return null;

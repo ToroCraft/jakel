@@ -57,9 +57,9 @@ public class ItemSpell extends Item {
 
   @Override
   public ActionResult<ItemStack> onItemRightClick(final World world, final EntityPlayer player, final EnumHand hand) {
-    if (world.isRemote) {
+    //if (world.isRemote) {
       player.openGui(Jakel.INSTANCE, GuiHandler.SPELL_GUI, world, 0, 0, 0);
-    }
+    //}
     return super.onItemRightClick(world, player, hand);
   }
 

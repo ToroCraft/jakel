@@ -34,7 +34,7 @@ public class GuiContainerSpell extends GuiContainer {
 
   public GuiContainerSpell(EntityPlayer player, SpellData spell, World world) {
     super(new ContainerSpell(player, spell.inventory, world));
-//		this.inventory = spell.inventory;
+    //this.inventory = spell.inventory;
 //		xSize = 176;
 //		ySize = 239;
   }
