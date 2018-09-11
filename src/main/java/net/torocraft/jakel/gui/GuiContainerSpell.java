@@ -13,8 +13,8 @@ public class GuiContainerSpell extends GuiContainer {
 
   public static final ResourceLocation LOCATION_BOOK_CODE_BACKGROUND = new ResourceLocation(Jakel.MODID, "textures/gui/spell.png");
 
-  private static final int GUI_WIDTH = 148;
-  private static final int GUI_HEIGHT = 100;
+  private static final int GUI_WIDTH = 207;
+  private static final int GUI_HEIGHT = 214;
 
   private int guiX = 0;
   private int guiY = 0;
