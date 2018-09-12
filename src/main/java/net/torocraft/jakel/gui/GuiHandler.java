@@ -7,7 +7,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.torocraft.jakel.Jakel;
-import net.torocraft.jakel.api.LootApi;
 import net.torocraft.jakel.capabilites.CapabilitySpell;
 
 public class GuiHandler implements IGuiHandler {

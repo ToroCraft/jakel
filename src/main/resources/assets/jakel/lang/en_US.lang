@@ -29,5 +29,8 @@ spell.FIREBALL_LARGE.description=Shoot large explosive fireballs
 spell.fireball_small.name=Fireball
 spell.fireball_small.description=Shoot fireballs
 
+spell.meteors.name=Meteor Storm
+spell.meteors.description=Cause meteors to rain down on your foes
+
 
 

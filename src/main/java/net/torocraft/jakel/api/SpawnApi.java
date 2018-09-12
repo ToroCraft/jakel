@@ -61,8 +61,7 @@ public class SpawnApi {
   }
 
   /**
-   * find the closest suitable spawn location to the given position within the provided radius and
-   * set it to the entity.
+   * find the closest suitable spawn location to the given position within the provided radius and set it to the entity.
    *
    * @return false if no location was found
    */

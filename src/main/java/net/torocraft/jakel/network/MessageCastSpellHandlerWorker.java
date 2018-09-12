@@ -59,6 +59,7 @@ public class MessageCastSpellHandlerWorker implements Runnable {
       target = new SpellTarget(message.pos, message.look);
     }
 
-    spell.type.cast(player, target);
+    //spell.type.cast(player, target);
+    Spells.METEORS.cast(player, target);
   }
 }

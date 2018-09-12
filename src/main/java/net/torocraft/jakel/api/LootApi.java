@@ -64,7 +64,7 @@ public class LootApi {
     InventoryPlayer inv = player.inventory;
     List<ItemStack> items = new ArrayList<>();
     ItemStack selectedItem = inv.getStackInSlot(5 + slot.ordinal());
-    if (notASpell(selectedItem)){
+    if (notASpell(selectedItem)) {
       return ItemStack.EMPTY;
     }
     return selectedItem;

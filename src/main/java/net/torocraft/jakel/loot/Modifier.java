@@ -20,7 +20,7 @@ public class Modifier {
     this.amount = amount;
   }
 
-  public void apply (Stats stats) {
+  public void apply(Stats stats) {
     type.apply(stats, amount);
   }
 }
