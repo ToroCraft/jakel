@@ -1,8 +1,10 @@
 package net.torocraft.jakel.gui;
 
+import java.awt.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -19,10 +21,13 @@ public class GuiContainerSpell extends GuiContainer {
   private int guiX = 0;
   private int guiY = 0;
 
-  //private final IInventory inventory;
+  private final SpellData spell;
+  private final String spellName;
 
-  public GuiContainerSpell() {
-    this(null, null, null);
+  public GuiContainerSpell(EntityPlayer player, SpellData spell, World world) {
+    super(new ContainerSpell(player, spell.inventory, world));
+    this.spell = spell;
+    this.spellName = spell.type.toString().toLowerCase();
   }
 
   @Override
@@ -32,39 +37,28 @@ public class GuiContainerSpell extends GuiContainer {
     guiY = 2;
   }
 
-  public GuiContainerSpell(EntityPlayer player, SpellData spell, World world) {
-    super(new ContainerSpell(player, spell.inventory, world));
-    //this.inventory = spell.inventory;
-//		xSize = 176;
-//		ySize = 239;
-  }
-
   @Override
   protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-//		Minecraft.getMinecraft().getTextureManager().bindTexture(guiTexture);
-//		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-//		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
-//		drawDonateButton(mouseX, mouseY);
-//
-//		if (questAccepted) {
-//			drawAbandonButton(mouseX, mouseY);
-//			drawCompleteButton(mouseX, mouseY);
-//		} else {
-//			drawAcceptButton(mouseX, mouseY);
-//		}
     GlStateManager.color(1, 1, 1, 1);
     Minecraft.getMinecraft().getTextureManager().bindTexture(LOCATION_BOOK_CODE_BACKGROUND);
     drawTexturedModalRect(guiX, guiY, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+    drawTextContent();
+  }
+
+  private void drawTextContent() {
+    int x = guiX + 20;
+    int y = guiY + 25;
+    fontRenderer.drawString(i18n("spell." + spellName + ".name"), x, y, Color.darkGray.getRGB());
+    fontRenderer.drawString(i18n("spell." + spellName + ".description"), x, y + 10, Color.black.getRGB());
+  }
+
+  private String i18n(String unlocalizedName) {
+    return I18n.format(unlocalizedName);
   }
 
   @Override
   protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
     super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-//		final int LABEL_XPOS = 5;
-//		final int LABEL_YPOS = 5;
-//		drawGuiTitle(LABEL_XPOS, LABEL_YPOS);
-//		updateReputationDisplay(LABEL_XPOS, LABEL_YPOS);
-//		drawQuestTitle(LABEL_XPOS, LABEL_YPOS);
   }
 
 }

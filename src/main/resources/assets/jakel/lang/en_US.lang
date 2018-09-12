@@ -1,7 +1,5 @@
 #PARSE_ESCAPES
 
-
-
 trait.DOUBLE_MELEE=DoubleMelee
 trait.ARCHER=Archer
 trait.SUMMON=Summoner
@@ -19,3 +17,17 @@ trait.STONE_ALLERGY=Stone Allergy
 trait.GREEDY=Greedy
 trait.GLUTTONY=Gluttonous
 trait.CHICKEN=Chicken
+
+item.spell.name=Spell
+
+spell.lightning.name=lLightning
+spell.lightning.description=Harness the power of lightning
+
+spell.fireball_large.name=Large Fireball
+spell.FIREBALL_LARGE.description=Shoot large explosive fireballs
+
+spell.fireball_small.name=Fireball
+spell.fireball_small.description=Shoot fireballs
+
+
+

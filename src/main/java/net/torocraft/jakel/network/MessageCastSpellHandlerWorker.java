@@ -25,25 +25,21 @@ public class MessageCastSpellHandlerWorker implements Runnable {
   @Override
   public void run() {
 
-    ItemStack spell = LootApi.getEquippedSpell(player, message.slot);
+    ItemStack spellItemStack = LootApi.getEquippedSpell(player, message.slot);
 
-    if (spell.isEmpty()) {
+    if (spellItemStack.isEmpty()) {
       System.out.println("Spell not equipped in " + message.slot);
       return;
     }
 
-    SpellData data = CapabilitySpell.get(spell);
+    SpellData spell = CapabilitySpell.get(spellItemStack);
 
-    if (data.type == null) {
-      data.type = Spells.LIGHTNING;
+    if (spell.type == null) {
+      spell.type = Spells.LIGHTNING;
     }
 
-    if (data.inventory == null) {
-      data.inventory = new SpellDataInventory();
-    }
-
-    for (int i = 0; i < data.inventory.getSizeInventory(); ++i) {
-      System.out.println("======= " + data.inventory.getStackInSlot(i));
+    if (spell.inventory == null) {
+      spell.inventory = new SpellDataInventory();
     }
 
     World world = player.world;
@@ -63,8 +59,6 @@ public class MessageCastSpellHandlerWorker implements Runnable {
       target = new SpellTarget(message.pos, message.look);
     }
 
-    Spells.LIGHTNING.cast(player, target);
-
-
+    spell.type.cast(player, target);
   }
 }

@@ -11,22 +11,15 @@ import net.minecraft.world.World;
 
 public class ContainerSpell extends Container {
 
-
-  private final int SLOT_SPACING = 18;
-
-  private final int X_POS = 3;
-  private final int Y_POS = 84; //106 + 109;
-
   private final IInventory inventory;
-  private final EntityPlayer player;
-
 
   public ContainerSpell(EntityPlayer player, IInventory inventory, World world) {
-    this.player = player;
     this.inventory = inventory;
     inventory.openInventory(player);
 
-    // TODO Shift click hot bar locks game
+    int X_POS = 3;
+    int Y_POS = 84;
+    int SLOT_SPACING = 18;
 
     for (int slotIndex = 0; slotIndex < 9; slotIndex++) {
       int x = X_POS + SLOT_SPACING * slotIndex;
@@ -42,6 +35,9 @@ public class ContainerSpell extends Container {
         addSlotToContainer(new Slot(player.inventory, slotNumber, x, y));
       }
     }
+
+    addSlotToContainer(new Slot(inventory, 0, 8, 54));
+    addSlotToContainer(new Slot(inventory, 1, 85, 54));
 
   }
 

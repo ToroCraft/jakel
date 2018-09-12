@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.torocraft.jakel.api.AttackApi;
 import net.torocraft.jakel.api.LootApi;
 import net.torocraft.jakel.api.LootApi.SpellSlot;
 import net.torocraft.jakel.network.MessageCastSpell;
@@ -72,8 +73,8 @@ public class CastSpellHandler {
     event.setCanceled(true);
 
     RayTraceResult rayTrace = RayTraceUtil.getMouseOverExtended(50);
+    Vec3d pos = AttackApi.inFrontOf(player);
 
-    Vec3d pos = player.getPositionVector().add(new Vec3d(0d, (double) player.getEyeHeight(), 0d));
     Vec3d look = player.getLookVec();
     MessageCastSpell message;
 

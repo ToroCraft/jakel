@@ -13,13 +13,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.torocraft.jakel.Jakel;
+import net.torocraft.jakel.capabilites.CapabilitySpell;
 import net.torocraft.jakel.gui.GuiHandler;
+import net.torocraft.jakel.spells.SpellData;
 
 @Mod.EventBusSubscriber
 public class ItemSpell extends Item {
@@ -50,16 +53,13 @@ public class ItemSpell extends Item {
   @SideOnly(net.minecraftforge.fml.relauncher.Side.CLIENT)
   @Override
   public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-    tooltip.add("TEST TEST");
-    tooltip.add("A");
-    tooltip.add("B");
+    SpellData spell = CapabilitySpell.get(stack);
+    tooltip.add(net.minecraft.client.resources.I18n.format(spell.getUnlocalizedName()));
   }
 
   @Override
   public ActionResult<ItemStack> onItemRightClick(final World world, final EntityPlayer player, final EnumHand hand) {
-    //if (world.isRemote) {
-      player.openGui(Jakel.INSTANCE, GuiHandler.SPELL_GUI, world, 0, 0, 0);
-    //}
+    player.openGui(Jakel.INSTANCE, GuiHandler.SPELL_GUI, world, 0, 0, 0);
     return super.onItemRightClick(world, player, hand);
   }
 
