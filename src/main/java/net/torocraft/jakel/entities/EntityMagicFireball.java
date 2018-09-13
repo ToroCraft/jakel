@@ -1,13 +1,12 @@
 package net.torocraft.jakel.entities;
 
-import net.minecraft.client.renderer.entity.RenderFireball;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.math.BlockPos;
@@ -52,19 +51,25 @@ public class EntityMagicFireball extends EntityFireball {
     EntityFireball.registerFixesFireball(fixer, "MagicFireball");
   }
 
+  @Override
+  protected boolean isFireballFiery() {
+    return false;
+  }
+
   protected void onImpact(RayTraceResult result) {
-    //System.out.println("IMPACT!" + result.entityHit + " " + result.hitVec);
     if (!this.world.isRemote) {
       if (result.entityHit != null) {
-
         handleEntityHit(result.entityHit);
-
       } else {
         handleGroundEffects(result.getBlockPos(), result.sideHit);
       }
-
       this.setDead();
     }
+  }
+
+  @Override
+  protected EnumParticleTypes getParticleType() {
+    return EnumParticleTypes.SNOW_SHOVEL;
   }
 
   private void handleEntityHit(Entity entity) {
@@ -78,27 +83,27 @@ public class EntityMagicFireball extends EntityFireball {
 
   private void handleGroundEffects(BlockPos pos, EnumFacing sideHit) {
 
-    handleFireGroundEffects(pos, sideHit);
+    //handleFireGroundEffects(pos, sideHit);
+    handleIceGroundEffects(pos, sideHit);
 
     // TODO handle other elements
 
-//    if (world.getBlockState(pos).getBlock() == Blocks.WATER) {
-//      world.setBlockState(pos, Blocks.SNOW_LAYER.getDefaultState());
-//    } else if (world.getBlockState(pos).getBlock() == Blocks.SNOW_LAYER) {
-//      // DO NOTHING?
-//    } else {
-//      BlockPos blockpos = pos.offset(sideHit);
-//      if (this.world.isAirBlock(blockpos)) {
-//        //this.world.setBlockState(blockpos, Blocks.FIRE.getDefaultState());
-//        world.setBlockState(blockpos, Blocks.SNOW_LAYER.getDefaultState());
-//      }
-//    }
   }
 
   private void handleFireGroundEffects(BlockPos pos, EnumFacing sideHit) {
     BlockPos blockpos = pos.offset(sideHit);
     if (world.isAirBlock(blockpos)) {
       world.setBlockState(blockpos, Blocks.FIRE.getDefaultState());
+    }
+  }
+
+  private void handleIceGroundEffects(BlockPos pos, EnumFacing sideHit) {
+    if (world.getBlockState(pos).getBlock() == Blocks.SNOW_LAYER) {
+      return;
+    }
+    BlockPos blockpos = pos.offset(sideHit);
+    if (this.world.isAirBlock(blockpos)) {
+      world.setBlockState(blockpos, Blocks.SNOW_LAYER.getDefaultState());
     }
   }
 
