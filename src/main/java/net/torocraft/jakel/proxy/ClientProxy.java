@@ -4,7 +4,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.torocraft.jakel.Jakel;
+import net.torocraft.jakel.entities.Entities;
 import net.torocraft.jakel.items.ItemSpell;
 
 public class ClientProxy extends CommonProxy {
@@ -15,6 +17,12 @@ public class ClientProxy extends CommonProxy {
     player
         .openGui(Jakel.INSTANCE, modGuiId, player.world, (int) player.posX, (int) player.posY,
             (int) player.posZ);
+  }
+
+  @Override
+  public void preInit(FMLPreInitializationEvent e) {
+    super.preInit(e);
+    Entities.initAllRenders();
   }
 
   @Override

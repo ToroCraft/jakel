@@ -8,6 +8,7 @@ import net.minecraft.entity.projectile.EntitySmallFireball;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.torocraft.jakel.entities.EntityMagicFireball;
 
 public class AttackApi {
 
@@ -43,7 +44,7 @@ public class AttackApi {
   }
 
   public static void smallFireBall(World world, Vec3d pos, Vec3d vel) {
-    EntitySmallFireball fireball = new EntitySmallFireball(world, pos.x, pos.y, pos.z, vel.x, vel.y, vel.z);
+    EntityMagicFireball fireball = new EntityMagicFireball(world, pos.x, pos.y, pos.z, vel.x, vel.y, vel.z);
     world.spawnEntity(fireball);
     world.playEvent(null, 1016, new BlockPos(pos), 0);
   }
