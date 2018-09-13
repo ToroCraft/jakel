@@ -62,4 +62,9 @@ public class AttackApi {
       smallFireBall(world, start, end.subtract(start));
     }
   }
+
+  public static void asteroid(World world, Vec3d pos) {
+    Vec3d start = pos.addVector(0, 80, 0);
+    largeFireBall(world, start, pos.subtract(start), 10);
+  }
 }

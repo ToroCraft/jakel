@@ -39,6 +39,21 @@ public enum Spells {
     if (pos != null) {
       AttackApi.meteors(player.world, pos, 4d);
     }
+  }),
+
+  ASTEROID((player, target) -> {
+    Vec3d pos = null;
+    if (Type.BLOCK.equals(target.type)) {
+      pos = new Vec3d(target.block.getX() + 0.5, target.block.getY(), target.block.getZ() + 0.5);
+    }
+
+    if (Type.ENTITY.equals(target.type)) {
+      pos = target.entity.getPositionVector();
+    }
+
+    if (pos != null) {
+      AttackApi.asteroid(player.world, pos);
+    }
   });
 
   private final SpellCaster caster;

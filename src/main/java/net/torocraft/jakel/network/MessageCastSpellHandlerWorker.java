@@ -60,6 +60,6 @@ public class MessageCastSpellHandlerWorker implements Runnable {
     }
 
     //spell.type.cast(player, target);
-    Spells.METEORS.cast(player, target);
+    Spells.ASTEROID.cast(player, target);
   }
 }
