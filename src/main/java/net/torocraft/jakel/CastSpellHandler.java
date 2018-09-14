@@ -15,7 +15,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.torocraft.jakel.api.AttackApi;
 import net.torocraft.jakel.api.LootApi;
 import net.torocraft.jakel.api.LootApi.SpellSlot;
+import net.torocraft.jakel.capabilites.CapabilitySpell;
 import net.torocraft.jakel.network.MessageCastSpell;
+import net.torocraft.jakel.spells.SpellData;
 import net.torocraft.jakel.util.RayTraceUtil;
 import org.lwjgl.input.Keyboard;
 
@@ -65,10 +67,16 @@ public class CastSpellHandler {
     boolean ctrl = Keyboard.isKeyDown(Keyboard.KEY_LCONTROL);
     SpellSlot slot = determineSpellSlot(event.getButton(), ctrl);
 
-    if (LootApi.getEquippedSpell(player, slot).isEmpty()) {
+    ItemStack spellStack = LootApi.getEquippedSpell(player, slot);
+
+    if (spellStack.isEmpty()) {
       System.out.println("No spell equipped to " + slot);
       return;
     }
+
+    SpellData spell = CapabilitySpell.get(spellStack);
+
+    System.out.println("casting spell from client " + spell.element);
 
     event.setCanceled(true);
 

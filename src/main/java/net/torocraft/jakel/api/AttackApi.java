@@ -39,6 +39,7 @@ public class AttackApi {
     EntityMagicFireball fireball = new EntityMagicFireball(world, shooter, pos.x, pos.y, pos.z, vel.x, vel.y, vel.z);
     fireball.explosionPower = explosionPower;
     fireball.elemental = element;
+    System.out.println("setting element fireball " + element);
     fireball.setSize(1, 1);
     world.spawnEntity(fireball);
     world.playEvent(null, 1016, new BlockPos(pos), 0);

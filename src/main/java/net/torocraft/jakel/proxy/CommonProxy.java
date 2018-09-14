@@ -14,6 +14,7 @@ import net.torocraft.jakel.gui.GuiHandler;
 import net.torocraft.jakel.network.MessageCastSpell;
 import net.torocraft.jakel.network.MessageHealAnimation;
 import net.torocraft.jakel.network.MessageReflectDamageAnimation;
+import net.torocraft.jakel.network.MessageSyncSpell;
 import net.torocraft.jakel.network.MessageWorshipAnimation;
 import net.torocraft.jakel.util.NullStorage;
 
@@ -41,6 +42,7 @@ public class CommonProxy {
     MessageReflectDamageAnimation.init(packetId++);
     MessageWorshipAnimation.init(packetId++);
     MessageCastSpell.init(packetId++);
+    MessageSyncSpell.init(packetId++);
   }
 
   public void openGui(int modGuiId) {

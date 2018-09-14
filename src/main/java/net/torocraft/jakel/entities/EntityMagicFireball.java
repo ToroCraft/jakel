@@ -91,6 +91,7 @@ public class EntityMagicFireball extends EntityFireball {
 
   @Override
   protected EnumParticleTypes getParticleType() {
+    //System.out.println("element during render " + elemental);
     if (elemental.equals(Element.COLD)) {
       return EnumParticleTypes.SNOW_SHOVEL;
 

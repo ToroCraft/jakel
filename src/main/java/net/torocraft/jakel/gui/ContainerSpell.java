@@ -14,17 +14,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.SPacketHeldItemChange;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.torocraft.jakel.Jakel;
 import net.torocraft.jakel.loot.Element;
+import net.torocraft.jakel.network.MessageSyncSpell;
 import net.torocraft.jakel.spells.SpellData;
 
 public class ContainerSpell extends Container {
 
   private final IInventory inventory;
   private final SpellData spell;
+  private final int heldItemIndex;
 
   public ContainerSpell(EntityPlayer player, SpellData spell, World world) {
     this.inventory = spell.inventory;
     this.spell = spell;
+    heldItemIndex = player.inventory.currentItem;
     inventory.openInventory(player);
     placeSlots(player, inventory);
     addListener(getListener());
@@ -88,9 +92,14 @@ public class ContainerSpell extends Container {
     addSlotToContainer(new Slot(inventory, 1, 85, 54));
 
     for (int slotIndex = 0; slotIndex < 9; slotIndex++) {
-      int x = X_POS + SLOT_SPACING * slotIndex;
-      int y = Y_POS + (3 * SLOT_SPACING) + 4;
-      addSlotToContainer(new Slot(player.inventory, slotIndex, x, y));
+
+        int x = X_POS + SLOT_SPACING * slotIndex;
+        int y = Y_POS + (3 * SLOT_SPACING) + 4;
+      if (slotIndex != heldItemIndex) {
+        addSlotToContainer(new Slot(player.inventory, slotIndex, x, y));
+      } else {
+        addSlotToContainer(new LockedSlot(player.inventory, slotIndex, x, y));
+      }
     }
 
     for (int row = 0; row < 3; row++) {
@@ -116,10 +125,22 @@ public class ContainerSpell extends Container {
   @Override
   public void onContainerClosed(EntityPlayer player) {
     super.onContainerClosed(player);
-    this.inventory.closeInventory(player);
+    inventory.closeInventory(player);
     if (player instanceof EntityPlayerMP) {
-      ((EntityPlayerMP) player).connection.sendPacket(new SPacketHeldItemChange(player.inventory.currentItem));
+      EntityPlayerMP playerMp = (EntityPlayerMP)player;
+      MessageSyncSpell message = new MessageSyncSpell(spell);
+      Jakel.NETWORK.sendTo(message, playerMp);
     }
   }
 
+  static class LockedSlot extends Slot {
+
+    public LockedSlot(IInventory inventory, int slotIndex, int x, int y) {
+      super(inventory, slotIndex, x, y);
+    }
+
+    public boolean canTakeStack(EntityPlayer playerIn) {
+      return false;
+    }
+  }
 }

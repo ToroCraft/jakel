@@ -5,7 +5,9 @@ import java.util.Random;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants.NBT;
@@ -21,7 +23,7 @@ import net.torocraft.jakel.spells.SpellData;
 
 public class MessageSyncSpell implements IMessage {
 
-  private SpellData spell;
+  private NBTTagCompound spellNbt;
 
   public static void init(int packetId) {
     Jakel.NETWORK
@@ -34,20 +36,18 @@ public class MessageSyncSpell implements IMessage {
   }
 
   public MessageSyncSpell(SpellData spell) {
-    this.spell = spell;
+    spellNbt = new NBTTagCompound();
+    NbtSerializer.write(spellNbt, spell);
   }
 
   @Override
   public void fromBytes(ByteBuf buf) {
-    spell = new SpellData();
-    NbtSerializer.read(ByteBufUtils.readTag(buf), spell);
+    spellNbt = ByteBufUtils.readTag(buf);
   }
 
   @Override
   public void toBytes(ByteBuf buf) {
-    NBTTagCompound c = new NBTTagCompound();
-    NbtSerializer.write(c, spell);
-    ByteBufUtils.writeTag(buf, c);
+    ByteBufUtils.writeTag(buf, spellNbt);
   }
 
   public static class Handler implements IMessageHandler<MessageSyncSpell, IMessage> {
@@ -60,7 +60,11 @@ public class MessageSyncSpell implements IMessage {
 
     public static void work(MessageSyncSpell message) {
       EntityPlayer player = Jakel.PROXY.getPlayer();
-      //CapabilitySpell.getCapability()
+      ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
+      CapabilitySpell.getCapability(stack).deserializeNBT(message.spellNbt);
+      System.out.println("synced data to client " + message.spellNbt);
+
+      System.out.println("element is now " + CapabilitySpell.get(stack).element);
     }
   }
 }

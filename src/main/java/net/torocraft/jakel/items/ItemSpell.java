@@ -62,7 +62,7 @@ public class ItemSpell extends Item {
     player.openGui(Jakel.INSTANCE, GuiHandler.SPELL_GUI, world, 0, 0, 0);
     return super.onItemRightClick(world, player, hand);
   }
-
+/*
   @Nullable
   @Override
   public NBTTagCompound getNBTShareTag(ItemStack stack) {
@@ -90,5 +90,5 @@ public class ItemSpell extends Item {
     CapabilitySpell.getCapability(stack).deserializeNBT(c.getCompoundTag("jakel_spell_cap_sync"));
     c.removeTag("jakel_spell_cap_sync");
     super.readNBTShareTag(stack, c);
-  }
+  }*/
 }
