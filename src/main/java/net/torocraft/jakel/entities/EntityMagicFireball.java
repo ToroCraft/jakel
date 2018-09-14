@@ -14,18 +14,30 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.torocraft.jakel.Jakel;
+import net.torocraft.jakel.loot.Element;
 
 public class EntityMagicFireball extends EntityFireball {
 
   public static String NAME = Jakel.MODID.toLowerCase() + "_" + Entities.MAGIC_FIREBALL.toString().toLowerCase();
 
+  public float explosionPower = 0;
+  public Element elemental = Element.PHYSICAL;
+
   public static void init() {
-    EntityRegistry.registerModEntity(
-        new ResourceLocation(Jakel.MODID, NAME),
-        EntityMagicFireball.class, NAME, Entities.MAGIC_FIREBALL.ordinal(),
-        Jakel.INSTANCE, 60, 2,
-        true, 0xFFFFFF, 0x000000);
+
+    ResourceLocation registryName = new ResourceLocation(Jakel.MODID, NAME);
+    Class<? extends Entity> entityClass = EntityMagicFireball.class;
+    String entityName = NAME;
+    int id = Entities.MAGIC_FIREBALL.ordinal();
+    Object mod = Jakel.INSTANCE;
+    int trackingRange = 100;
+    int updateFrequency = 1;
+    boolean sendsVelocityUpdates = true;
+
+    EntityRegistry.registerModEntity(registryName, entityClass, entityName, id, mod, trackingRange, updateFrequency, sendsVelocityUpdates);
   }
 
   public static void initRender() {
@@ -34,17 +46,18 @@ public class EntityMagicFireball extends EntityFireball {
 
   public EntityMagicFireball(World worldIn) {
     super(worldIn);
-    this.setSize(0.3125F, 0.3125F);
+    setSize(0.3125F, 0.3125F);
   }
 
-  public EntityMagicFireball(World worldIn, EntityLivingBase shooter, double accelX, double accelY, double accelZ) {
-    super(worldIn, shooter, accelX, accelY, accelZ);
-    this.setSize(0.3125F, 0.3125F);
-  }
-
-  public EntityMagicFireball(World worldIn, double x, double y, double z, double accelX, double accelY, double accelZ) {
+  public EntityMagicFireball(World worldIn, EntityLivingBase shooter, double x, double y, double z, double accelX, double accelY, double accelZ) {
     super(worldIn, x, y, z, accelX, accelY, accelZ);
-    this.setSize(0.3125F, 0.3125F);
+    shootingEntity = shooter;
+    setSize(0.3125F, 0.3125F);
+  }
+
+  @Override
+  public void setSize(float width, float height) {
+    super.setSize(width, height);
   }
 
   public static void registerFixesSmallFireball(DataFixer fixer) {
@@ -57,19 +70,45 @@ public class EntityMagicFireball extends EntityFireball {
   }
 
   protected void onImpact(RayTraceResult result) {
-    if (!this.world.isRemote) {
+    if (!world.isRemote) {
       if (result.entityHit != null) {
         handleEntityHit(result.entityHit);
       } else {
         handleGroundEffects(result.getBlockPos(), result.sideHit);
       }
-      this.setDead();
+      handleExplosion();
+      setDead();
+    }
+  }
+
+  private void handleExplosion() {
+    if (explosionPower > 0) {
+      boolean isFlaming = false;
+      boolean damagesTerrain = true;
+      world.newExplosion(shootingEntity, posX, posY, posZ, explosionPower, isFlaming, damagesTerrain);
     }
   }
 
   @Override
   protected EnumParticleTypes getParticleType() {
-    return EnumParticleTypes.SNOW_SHOVEL;
+    if (elemental.equals(Element.COLD)) {
+      return EnumParticleTypes.SNOW_SHOVEL;
+
+    } else if (elemental.equals(Element.FIRE)) {
+      return EnumParticleTypes.FLAME;
+
+    } else if (elemental.equals(Element.POISON)) {
+      return EnumParticleTypes.SLIME;
+
+    } else if (elemental.equals(Element.LIGHTNING)) {
+      return EnumParticleTypes.CRIT_MAGIC;
+
+    } else if (elemental.equals(Element.WITHER)) {
+      return EnumParticleTypes.DRAGON_BREATH;
+
+    } else {
+      return EnumParticleTypes.SMOKE_NORMAL;
+    }
   }
 
   private void handleEntityHit(Entity entity) {
@@ -77,17 +116,19 @@ public class EntityMagicFireball extends EntityFireball {
     boolean attacked = entity.attackEntityFrom(DamageSource.causeFireballDamage(this, shootingEntity), 10.0F);
     if (attacked) {
       applyEnchantments(shootingEntity, entity);
-      entity.setFire(5);
+      if (elemental.equals(Element.FIRE)) {
+        entity.setFire(5);
+      }
+      //((EntityLivingBase)entity).addPotionEffect(//);
     }
   }
 
   private void handleGroundEffects(BlockPos pos, EnumFacing sideHit) {
-
-    //handleFireGroundEffects(pos, sideHit);
-    handleIceGroundEffects(pos, sideHit);
-
-    // TODO handle other elements
-
+    if (elemental.equals(Element.COLD)) {
+      handleIceGroundEffects(pos, sideHit);
+    } else if (elemental.equals(Element.FIRE)) {
+      handleFireGroundEffects(pos, sideHit);
+    }
   }
 
   private void handleFireGroundEffects(BlockPos pos, EnumFacing sideHit) {
@@ -105,6 +146,15 @@ public class EntityMagicFireball extends EntityFireball {
     if (this.world.isAirBlock(blockpos)) {
       world.setBlockState(blockpos, Blocks.SNOW_LAYER.getDefaultState());
     }
+  }
+
+  public float getBrightness() {
+    return 1.0F;
+  }
+
+  @SideOnly(Side.CLIENT)
+  public int getBrightnessForRender() {
+    return 15728880;
   }
 
   public boolean canBeCollidedWith() {

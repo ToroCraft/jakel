@@ -3,12 +3,11 @@ package net.torocraft.jakel.api;
 import java.util.Random;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
-import net.minecraft.entity.projectile.EntityLargeFireball;
-import net.minecraft.entity.projectile.EntitySmallFireball;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.torocraft.jakel.entities.EntityMagicFireball;
+import net.torocraft.jakel.loot.Element;
 
 public class AttackApi {
 
@@ -36,35 +35,38 @@ public class AttackApi {
     return new Vec3d(pos.x + x, pos.y, pos.z + z);
   }
 
-  public static void largeFireBall(World world, Vec3d pos, Vec3d vel, int explosionPower) {
-    EntityLargeFireball fireball = new EntityLargeFireball(world, pos.x, pos.y, pos.z, vel.x, vel.y, vel.z);
+  public static void largeFireBall(EntityLivingBase shooter, Element element, World world, Vec3d pos, Vec3d vel, int explosionPower) {
+    EntityMagicFireball fireball = new EntityMagicFireball(world, shooter, pos.x, pos.y, pos.z, vel.x, vel.y, vel.z);
     fireball.explosionPower = explosionPower;
+    fireball.elemental = element;
+    fireball.setSize(1, 1);
     world.spawnEntity(fireball);
     world.playEvent(null, 1016, new BlockPos(pos), 0);
   }
 
-  public static void smallFireBall(World world, Vec3d pos, Vec3d vel) {
-    EntityMagicFireball fireball = new EntityMagicFireball(world, pos.x, pos.y, pos.z, vel.x, vel.y, vel.z);
+  public static void smallFireBall(EntityLivingBase shooter, Element element, World world, Vec3d pos, Vec3d vel) {
+    EntityMagicFireball fireball = new EntityMagicFireball(world, shooter, pos.x, pos.y, pos.z, vel.x, vel.y, vel.z);
+    fireball.elemental = element;
     world.spawnEntity(fireball);
     world.playEvent(null, 1016, new BlockPos(pos), 0);
   }
 
-  public static void lightning(World world, Vec3d pos) {
+  public static void lightning(EntityLivingBase shooter, Element element, World world, Vec3d pos) {
     world.addWeatherEffect(new EntityLightningBolt(world, pos.x, pos.y, pos.z, false));
   }
 
-  public static void meteors(World world, Vec3d pos, double radius) {
+  public static void meteors(EntityLivingBase shooter, Element element, World world, Vec3d pos, double radius) {
     double tempRadius = radius / 2;
     for (int i = 0; i < 100; i++) {
       tempRadius += 0.005d * radius;
       Vec3d end = randomSpotInRadius(pos, tempRadius);
       Vec3d start = end.addVector(0, (rand.nextDouble() * 100) + 20, 0);
-      smallFireBall(world, start, end.subtract(start));
+      smallFireBall(shooter, element, world, start, end.subtract(start));
     }
   }
 
-  public static void asteroid(World world, Vec3d pos) {
-    Vec3d start = pos.addVector(0, 80, 0);
-    largeFireBall(world, start, pos.subtract(start), 10);
+  public static void asteroid(EntityLivingBase shooter, Element element, World world, Vec3d pos) {
+    Vec3d start = pos.addVector(0, 50, 0);
+    largeFireBall(shooter, element, world, start, pos.subtract(start), 10);
   }
 }

@@ -11,12 +11,18 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.torocraft.jakel.api.EnchantApi;
+import net.torocraft.jakel.capabilites.CapabilitySpell;
+import net.torocraft.jakel.items.ItemSpell;
+import net.torocraft.jakel.spells.SpellData;
+import net.torocraft.jakel.spells.Spells;
 import net.torocraft.jakel.traits.Type;
 
 public class JakelCommand extends CommandBase {
@@ -52,8 +58,34 @@ public class JakelCommand extends CommandBase {
       case "enchant":
         enchant(sender, args);
         return;
+      case "dropSpellBooks":
+        dropSpellBooks(sender, args);
+        return;
       default:
         throw new WrongUsageException("commands.jakel.usage");
+    }
+  }
+
+  private void dropSpellBooks(ICommandSender sender, String[] args) {
+    if (!(sender instanceof EntityPlayer)) {
+      return;
+    }
+    EntityPlayer player = (EntityPlayer) sender;
+    List<ItemStack> spells = new ArrayList<>();
+    for(Spells type : Spells.values()) {
+      ItemStack spell = new ItemStack(ItemSpell.INSTANCE);
+      SpellData data = CapabilitySpell.get(spell);
+      data.type = type;
+      spells.add(spell);
+    }
+    dropItems(player, spells);
+  }
+
+  private void dropItems(EntityPlayer player, List<ItemStack> items) {
+    for (ItemStack stack : items) {
+      EntityItem dropItem = new EntityItem(player.world, player.posX, player.posY, player.posZ, stack);
+      dropItem.setNoPickupDelay();
+      player.world.spawnEntity(dropItem);
     }
   }
 
@@ -99,7 +131,7 @@ public class JakelCommand extends CommandBase {
   public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender,
       String[] args, @Nullable BlockPos targetPos) {
     if (args.length == 1) {
-      return getListOfStringsMatchingLastWord(args, "enchant");
+      return getListOfStringsMatchingLastWord(args, "enchant", "dropSpellBooks");
     }
     String command = args[0];
     switch (command) {

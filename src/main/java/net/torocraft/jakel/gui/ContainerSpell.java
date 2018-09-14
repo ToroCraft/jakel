@@ -1,23 +1,91 @@
 package net.torocraft.jakel.gui;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.server.SPacketHeldItemChange;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.torocraft.jakel.loot.Element;
+import net.torocraft.jakel.spells.SpellData;
 
 public class ContainerSpell extends Container {
 
   private final IInventory inventory;
+  private final SpellData spell;
 
-  public ContainerSpell(EntityPlayer player, IInventory inventory, World world) {
-    this.inventory = inventory;
+  public ContainerSpell(EntityPlayer player, SpellData spell, World world) {
+    this.inventory = spell.inventory;
+    this.spell = spell;
     inventory.openInventory(player);
+    placeSlots(player, inventory);
+    addListener(getListener());
+  }
 
+  private IContainerListener getListener() {
+    return new IContainerListener() {
+
+      @Override
+      public void sendAllContents(Container containerToSend, NonNullList<ItemStack> itemsList) {
+
+      }
+
+      @Override
+      public void sendSlotContents(Container containerToSend, int slot, ItemStack stack) {
+        if (slot == 0) {
+          updateElemental(stack.getItem());
+        }
+      }
+
+      @Override
+      public void sendWindowProperty(Container containerIn, int varToUpdate, int newValue) {
+
+      }
+
+      @Override
+      public void sendAllWindowProperties(Container containerIn, IInventory inventory) {
+
+      }
+    };
+  }
+
+  public void updateElemental(Item item) {
+    if (!(item instanceof ItemBlock)) {
+      return;
+    }
+    Block block = ((ItemBlock) item).getBlock();
+
+    if (Blocks.MAGMA == block) {
+      spell.element = Element.FIRE;
+    } else if (Blocks.ICE == block) {
+      spell.element = Element.COLD;
+    } else if (Blocks.OBSIDIAN == block) {
+      spell.element = Element.WITHER;
+    } else if (Blocks.SLIME_BLOCK == block) {
+      spell.element = Element.POISON;
+    } else if (Blocks.REDSTONE_BLOCK == block) {
+      spell.element = Element.LIGHTNING;
+    } else {
+      spell.element = Element.PHYSICAL;
+    }
+
+  }
+
+  private void placeSlots(EntityPlayer player, IInventory inventory) {
     int X_POS = 3;
     int Y_POS = 84;
     int SLOT_SPACING = 18;
+
+    addSlotToContainer(new Slot(inventory, 0, 8, 54));
+    addSlotToContainer(new Slot(inventory, 1, 85, 54));
 
     for (int slotIndex = 0; slotIndex < 9; slotIndex++) {
       int x = X_POS + SLOT_SPACING * slotIndex;
@@ -33,10 +101,6 @@ public class ContainerSpell extends Container {
         addSlotToContainer(new Slot(player.inventory, slotNumber, x, y));
       }
     }
-
-    addSlotToContainer(new Slot(inventory, 0, 8, 54));
-    addSlotToContainer(new Slot(inventory, 1, 85, 54));
-
   }
 
   @Override
@@ -53,6 +117,9 @@ public class ContainerSpell extends Container {
   public void onContainerClosed(EntityPlayer player) {
     super.onContainerClosed(player);
     this.inventory.closeInventory(player);
+    if (player instanceof EntityPlayerMP) {
+      ((EntityPlayerMP) player).connection.sendPacket(new SPacketHeldItemChange(player.inventory.currentItem));
+    }
   }
 
 }

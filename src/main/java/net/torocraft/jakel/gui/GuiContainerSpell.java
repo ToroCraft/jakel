@@ -25,7 +25,7 @@ public class GuiContainerSpell extends GuiContainer {
   private final String spellName;
 
   public GuiContainerSpell(EntityPlayer player, SpellData spell, World world) {
-    super(new ContainerSpell(player, spell.inventory, world));
+    super(new ContainerSpell(player, spell, world));
     this.spell = spell;
     this.spellName = spell.type.toString().toLowerCase();
   }

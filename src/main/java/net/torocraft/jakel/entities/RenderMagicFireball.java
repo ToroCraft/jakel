@@ -8,9 +8,11 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.init.Items;
 import net.minecraft.util.ResourceLocation;
+import net.torocraft.jakel.loot.Element;
 
 public class RenderMagicFireball extends Render<EntityMagicFireball> {
 
@@ -57,9 +59,20 @@ public class RenderMagicFireball extends Render<EntityMagicFireball> {
     bufferbuilder.pos(0.5D, -0.25D, 0.0D).tex((double) f1, (double) f3).normal(0.0F, 1.0F, 0.0F).endVertex();
     bufferbuilder.pos(0.5D, 0.75D, 0.0D).tex((double) f1, (double) f2).normal(0.0F, 1.0F, 0.0F).endVertex();
     bufferbuilder.pos(-0.5D, 0.75D, 0.0D).tex((double) f, (double) f2).normal(0.0F, 1.0F, 0.0F).endVertex();
-    GlStateManager.color(0x0, 0x00, 0xff);
+
+    if (entity.elemental.equals(Element.COLD)) {
+      GlStateManager.color(0x0, 0x00, 0xff);
+    }
+
+    if (entity.elemental.equals(Element.POISON)) {
+      GlStateManager.color(0x0, 0xff, 0x0);
+    }
+
     tessellator.draw();
-    GlStateManager.color(0xff, 0xff, 0xff);
+
+    if (entity.elemental.equals(Element.COLD) || entity.elemental.equals(Element.POISON)) {
+      GlStateManager.color(0xff, 0xff, 0xff);
+    }
 
     if (this.renderOutlines) {
       GlStateManager.disableOutlineMode();
@@ -74,7 +87,7 @@ public class RenderMagicFireball extends Render<EntityMagicFireball> {
   @Nullable
   @Override
   protected ResourceLocation getEntityTexture(EntityMagicFireball entity) {
-    return null;
+    return TextureMap.LOCATION_BLOCKS_TEXTURE;
   }
 
 }

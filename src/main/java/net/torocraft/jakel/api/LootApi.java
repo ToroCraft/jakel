@@ -14,20 +14,6 @@ import net.torocraft.jakel.loot.Stats;
 
 public class LootApi {
 
-  public static void useMagicalWeapon(World world, EntityLivingBase user, ItemStack weapon) {
-
-    // check if magical
-
-    // get magical skill
-
-    // check cooldown / cost
-
-    // reset cooldown or subtract mana
-
-    AttackApi.largeFireBall(world, AttackApi.inFrontOf(user), user.getLookVec(), 1);
-  }
-
-
   public static boolean isMagicalItem(ItemData data) {
     return data != null;
   }

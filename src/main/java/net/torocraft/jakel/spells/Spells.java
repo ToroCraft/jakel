@@ -7,54 +7,45 @@ import net.torocraft.jakel.spells.SpellTarget.Type;
 
 public enum Spells {
 
-  LIGHTNING((player, target) -> {
-    if (Type.BLOCK.equals(target.type)) {
-      Vec3d pos = new Vec3d(target.block.getX() + 0.5, target.block.getY(), target.block.getZ() + 0.5);
-      AttackApi.lightning(player.world, pos);
-    }
-
-    if (Type.ENTITY.equals(target.type)) {
-      AttackApi.lightning(player.world, target.entity.getPositionVector());
-    }
-  }),
-
-  FIREBALL_LARGE((player, target) -> {
-    AttackApi.largeFireBall(player.world, target.casterPosition, target.casterLook, 2);
-  }),
-
-  FIREBALL_SMALL((player, target) -> {
-    AttackApi.smallFireBall(player.world, target.casterPosition, target.casterLook);
-  }),
-
-  METEORS((player, target) -> {
-    Vec3d pos = null;
-    if (Type.BLOCK.equals(target.type)) {
-      pos = new Vec3d(target.block.getX() + 0.5, target.block.getY(), target.block.getZ() + 0.5);
-    }
-
-    if (Type.ENTITY.equals(target.type)) {
-      pos = target.entity.getPositionVector();
-    }
-
+  LIGHTNING((player, spell, target) -> {
+    Vec3d pos = targetLocation(target);
     if (pos != null) {
-      AttackApi.meteors(player.world, pos, 4d);
+      AttackApi.lightning(player, spell.element, player.world, pos);
     }
   }),
 
-  ASTEROID((player, target) -> {
-    Vec3d pos = null;
-    if (Type.BLOCK.equals(target.type)) {
-      pos = new Vec3d(target.block.getX() + 0.5, target.block.getY(), target.block.getZ() + 0.5);
-    }
+  FIREBALL_LARGE((player, spell, target) -> {
+    AttackApi.largeFireBall(player, spell.element, player.world, target.casterPosition, target.casterLook, 2);
+  }),
 
-    if (Type.ENTITY.equals(target.type)) {
-      pos = target.entity.getPositionVector();
-    }
+  FIREBALL_SMALL((player, spell, target) -> {
+    AttackApi.smallFireBall(player, spell.element, player.world, target.casterPosition, target.casterLook);
+  }),
 
+  METEORS((player, spell, target) -> {
+    Vec3d pos = targetLocation(target);
     if (pos != null) {
-      AttackApi.asteroid(player.world, pos);
+      AttackApi.meteors(player, spell.element, player.world, pos, 4d);
+    }
+  }),
+
+  ASTEROID((player, spell, target) -> {
+    Vec3d pos = targetLocation(target);
+    if (pos != null) {
+      AttackApi.asteroid(player, spell.element, player.world, pos);
     }
   });
+
+  private static Vec3d targetLocation(SpellTarget target) {
+    Vec3d pos = null;
+    if (Type.BLOCK.equals(target.type)) {
+      pos = new Vec3d(target.block.getX() + 0.5, target.block.getY(), target.block.getZ() + 0.5);
+    }
+    if (Type.ENTITY.equals(target.type)) {
+      pos = target.entity.getPositionVector();
+    }
+    return pos;
+  }
 
   private final SpellCaster caster;
 
@@ -62,8 +53,9 @@ public enum Spells {
     this.caster = caster;
   }
 
-  public void cast(EntityPlayer player, SpellTarget target) {
-    caster.cast(player, target);
+  public void cast(EntityPlayer player, SpellData spell, SpellTarget target) {
+    //Stats stats = CapabilityPlayerData.get(player).stats;
+    caster.cast(player, spell, target);
   }
 
 }

@@ -5,5 +5,5 @@ import net.minecraft.entity.player.EntityPlayer;
 @FunctionalInterface
 public interface SpellCaster {
 
-  void cast(EntityPlayer player, SpellTarget target);
+  void cast(EntityPlayer player, SpellData spell, SpellTarget target);
 }

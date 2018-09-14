@@ -20,17 +20,18 @@ trait.CHICKEN=Chicken
 
 item.spell.name=Spell
 
-spell.lightning.name=lLightning
+spell.lightning.name=Lightning
 spell.lightning.description=Harness the power of lightning
 
 spell.fireball_large.name=Large Fireball
-spell.FIREBALL_LARGE.description=Shoot large explosive fireballs
+spell.fireball_large.description=Shoot large explosive fireballs
 
 spell.fireball_small.name=Fireball
 spell.fireball_small.description=Shoot fireballs
 
 spell.meteors.name=Meteor Storm
-spell.meteors.description=Cause meteors to rain down on your foes
+spell.meteors.description=Cause meteors to rain down \non your foes
 
-
+spell.asteroid.name=Asteroid
+spell.asteroid.description=Call in an explosive asteroid \nfrom the heavens
 
