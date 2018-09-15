@@ -15,11 +15,11 @@ public enum Spells {
   }),
 
   FIREBALL_LARGE((player, spell, target) -> {
-    AttackApi.largeFireBall(player, spell.element, player.world, target.casterPosition, target.casterLook, 2);
+    AttackApi.largeMagicMissile(player, spell.element, player.world, target.casterPosition, target.casterLook, 1);
   }),
 
   FIREBALL_SMALL((player, spell, target) -> {
-    AttackApi.smallFireBall(player, spell.element, player.world, target.casterPosition, target.casterLook);
+    AttackApi.smallMagicMissile(player, spell.element, player.world, target.casterPosition, target.casterLook);
   }),
 
   METEORS((player, spell, target) -> {

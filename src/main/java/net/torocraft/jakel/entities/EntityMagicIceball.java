@@ -17,7 +17,7 @@ public class EntityMagicIceball extends EntityMagicMissile {
 
   public EntityMagicIceball(World worldIn) {
     super(worldIn);
-    setSize(0.3125F, 0.3125F);
+    elemental = Element.COLD;
   }
 
   public EntityMagicIceball(World worldIn, EntityLivingBase shooter, double x, double y, double z, double accX, double accY, double accZ) {

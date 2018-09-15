@@ -8,6 +8,8 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.torocraft.jakel.Jakel;
 import net.torocraft.jakel.capabilites.CapabilitySpell;
+import net.torocraft.jakel.items.ItemSpell;
+import net.torocraft.jakel.spells.SpellData;
 
 public class GuiHandler implements IGuiHandler {
 
@@ -20,8 +22,11 @@ public class GuiHandler implements IGuiHandler {
   @Override
   public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
     if (ID == SPELL_GUI) {
-      ItemStack spell = player.getHeldItem(EnumHand.MAIN_HAND);
-      return new ContainerSpell(player, CapabilitySpell.get(spell), world);
+      SpellData spell = getHeldSpell(player);
+      if (spell == null) {
+        return null;
+      }
+      return new ContainerSpell(player, spell, world);
     }
     return null;
   }
@@ -29,9 +34,20 @@ public class GuiHandler implements IGuiHandler {
   @Override
   public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
     if (ID == SPELL_GUI) {
-      ItemStack spell = player.getHeldItem(EnumHand.MAIN_HAND);
-      return new GuiContainerSpell(player, CapabilitySpell.get(spell), world);
+      SpellData spell = getHeldSpell(player);
+      if (spell == null) {
+        return null;
+      }
+      return new GuiContainerSpell(player, spell, world);
     }
     return null;
+  }
+
+  private SpellData getHeldSpell(EntityPlayer player) {
+    ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
+    if (stack.isEmpty() || stack.getItem() != ItemSpell.INSTANCE) {
+      return null;
+    }
+    return CapabilitySpell.get(stack);
   }
 }

@@ -35,18 +35,16 @@ public class AttackApi {
     return new Vec3d(pos.x + x, pos.y, pos.z + z);
   }
 
-  public static void largeFireBall(EntityLivingBase shooter, Element element, World world, Vec3d pos, Vec3d vel, int explosionPower) {
+  public static void largeMagicMissile(EntityLivingBase shooter, Element element, World world, Vec3d pos, Vec3d vel, int explosionPower) {
     EntityMagicMissile missile = EntityMagicMissile.getElementalMissile(element, world, shooter, pos.x, pos.y, pos.z, vel.x, vel.y, vel.z);
-    missile.explosionPower = explosionPower;
-    missile.elemental = element;
+    missile.setExplosionPower(explosionPower);
     missile.setSize(1, 1);
     world.spawnEntity(missile);
     world.playEvent(null, 1016, new BlockPos(pos), 0);
   }
 
-  public static void smallFireBall(EntityLivingBase shooter, Element element, World world, Vec3d pos, Vec3d vel) {
+  public static void smallMagicMissile(EntityLivingBase shooter, Element element, World world, Vec3d pos, Vec3d vel) {
     EntityMagicMissile missile = EntityMagicMissile.getElementalMissile(element, world, shooter, pos.x, pos.y, pos.z, vel.x, vel.y, vel.z);
-    missile.elemental = element;
     world.spawnEntity(missile);
     world.playEvent(null, 1016, new BlockPos(pos), 0);
   }
@@ -61,12 +59,12 @@ public class AttackApi {
       tempRadius += 0.005d * radius;
       Vec3d end = randomSpotInRadius(pos, tempRadius);
       Vec3d start = end.addVector(0, (rand.nextDouble() * 100) + 20, 0);
-      smallFireBall(shooter, element, world, start, end.subtract(start));
+      smallMagicMissile(shooter, element, world, start, end.subtract(start));
     }
   }
 
   public static void asteroid(EntityLivingBase shooter, Element element, World world, Vec3d pos) {
     Vec3d start = pos.addVector(0, 50, 0);
-    largeFireBall(shooter, element, world, start, pos.subtract(start), 10);
+    largeMagicMissile(shooter, element, world, start, pos.subtract(start), 10);
   }
 }

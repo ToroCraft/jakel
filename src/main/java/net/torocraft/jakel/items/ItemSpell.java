@@ -10,7 +10,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
@@ -62,33 +61,5 @@ public class ItemSpell extends Item {
     player.openGui(Jakel.INSTANCE, GuiHandler.SPELL_GUI, world, 0, 0, 0);
     return super.onItemRightClick(world, player, hand);
   }
-/*
-  @Nullable
-  @Override
-  public NBTTagCompound getNBTShareTag(ItemStack stack) {
-    NBTTagCompound c = super.getNBTShareTag(stack);
-    if (c == null) {
-      c = new NBTTagCompound();
-    }
-    c.setTag("jakel_spell_cap_sync", CapabilitySpell.getCapability(stack).serializeNBT());
-    System.out.println("saving item " + c);
-    return c;
-  }
 
-  @Override
-  public boolean updateItemStackNBT(NBTTagCompound c) {
-    System.out.println("update item " + c);
-    return super.updateItemStackNBT(c);
-  }
-
-  @Override
-  public void readNBTShareTag(ItemStack stack, @Nullable NBTTagCompound c) {
-    System.out.println("reading item " + c);
-    if (c == null) {
-      return;
-    }
-    CapabilitySpell.getCapability(stack).deserializeNBT(c.getCompoundTag("jakel_spell_cap_sync"));
-    c.removeTag("jakel_spell_cap_sync");
-    super.readNBTShareTag(stack, c);
-  }*/
 }

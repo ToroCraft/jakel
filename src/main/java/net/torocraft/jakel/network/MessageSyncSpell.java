@@ -62,9 +62,6 @@ public class MessageSyncSpell implements IMessage {
       EntityPlayer player = Jakel.PROXY.getPlayer();
       ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
       CapabilitySpell.getCapability(stack).deserializeNBT(message.spellNbt);
-      System.out.println("synced data to client " + message.spellNbt);
-
-      System.out.println("element is now " + CapabilitySpell.get(stack).element);
     }
   }
 }

@@ -60,19 +60,17 @@ public class RenderMagicMissile extends Render<EntityMagicMissile> {
     bufferbuilder.pos(0.5D, 0.75D, 0.0D).tex((double) f1, (double) f2).normal(0.0F, 1.0F, 0.0F).endVertex();
     bufferbuilder.pos(-0.5D, 0.75D, 0.0D).tex((double) f, (double) f2).normal(0.0F, 1.0F, 0.0F).endVertex();
 
-    if (entity.elemental.equals(Element.COLD)) {
+    if (entity.getElemental().equals(Element.COLD)) {
       GlStateManager.color(0x0, 0x00, 0xff);
     }
 
-    if (entity.elemental.equals(Element.POISON)) {
+    if (entity.getElemental().equals(Element.POISON)) {
       GlStateManager.color(0x0, 0xff, 0x0);
     }
 
     tessellator.draw();
 
-    if (entity.elemental.equals(Element.COLD) || entity.elemental.equals(Element.POISON)) {
-      GlStateManager.color(0xff, 0xff, 0xff);
-    }
+    GlStateManager.color(0xff, 0xff, 0xff);
 
     if (this.renderOutlines) {
       GlStateManager.disableOutlineMode();

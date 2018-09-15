@@ -8,7 +8,10 @@ import net.torocraft.jakel.Jakel;
 public enum Entities {
   MAGIC_MISSILE(EntityMagicMissile.class),
   MAGIC_FIREBALL(EntityMagicFireball.class),
-  MAGIC_ICEBALL(EntityMagicIceball.class);
+  MAGIC_ICEBALL(EntityMagicIceball.class),
+  MAGIC_WITHERBALL(EntityMagicWitherball.class),
+  MAGIC_LIGHTNINGBALL(EntityMagicLightningball.class),
+  MAGIC_SLIMEBALL(EntityMagicSlimeball.class);
 
   private final Class<? extends Entity> clazz;
 

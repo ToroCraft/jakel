@@ -16,8 +16,8 @@ import net.torocraft.jakel.loot.Element;
 
 public class EntityMagicMissile extends EntityFireball {
 
-  public int explosionPower = 0;
-  public Element elemental = Element.PHYSICAL;
+  protected int explosionPower = 0;
+  protected Element elemental = Element.PHYSICAL;
 
   public static void initRender() {
     RenderingRegistry.registerEntityRenderingHandler(EntityMagicMissile.class, RenderMagicMissile::new);
@@ -39,13 +39,13 @@ public class EntityMagicMissile extends EntityFireball {
       case FIRE:
         return new EntityMagicFireball(worldIn, shooter, x, y, z, accX, accY, accZ);
       case LIGHTNING:
-        return new EntityMagicMissile(worldIn, shooter, x, y, z, accX, accY, accZ);
+        return new EntityMagicLightningball(worldIn, shooter, x, y, z, accX, accY, accZ);
       case WITHER:
-        return new EntityMagicMissile(worldIn, shooter, x, y, z, accX, accY, accZ);
+        return new EntityMagicWitherball(worldIn, shooter, x, y, z, accX, accY, accZ);
       case COLD:
         return new EntityMagicIceball(worldIn, shooter, x, y, z, accX, accY, accZ);
       case POISON:
-        return new EntityMagicMissile(worldIn, shooter, x, y, z, accX, accY, accZ);
+        return new EntityMagicSlimeball(worldIn, shooter, x, y, z, accX, accY, accZ);
       default:
         return new EntityMagicMissile(worldIn, shooter, x, y, z, accX, accY, accZ);
     }
@@ -75,7 +75,7 @@ public class EntityMagicMissile extends EntityFireball {
 
   protected void handleEntityImpact(Entity entity) {
     // TODO apply player stats
-    boolean attacked = entity.attackEntityFrom(DamageSource.causeFireballDamage(this, shootingEntity), 10.0F);
+    boolean attacked = entity.attackEntityFrom(DamageSource.causeFireballDamage(this, shootingEntity), 1.0F);
 
     if (attacked) {
       handleEntityWasDamaged(entity);
@@ -118,6 +118,18 @@ public class EntityMagicMissile extends EntityFireball {
 
   public boolean attackEntityFrom(DamageSource source, float amount) {
     return false;
+  }
+
+  public int getExplosionPower() {
+    return explosionPower;
+  }
+
+  public void setExplosionPower(int explosionPower) {
+    this.explosionPower = explosionPower;
+  }
+
+  public Element getElemental() {
+    return elemental;
   }
 
 }

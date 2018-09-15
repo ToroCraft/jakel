@@ -76,6 +76,10 @@ public class CastSpellHandler {
 
     SpellData spell = CapabilitySpell.get(spellStack);
 
+    if (spell == null) {
+      System.out.println("spell cap missing??? " + slot);
+    }
+
     System.out.println("casting spell from client " + spell.element);
 
     event.setCanceled(true);
