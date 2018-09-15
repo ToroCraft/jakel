@@ -45,6 +45,9 @@ public class EntityMagicMissile extends Entity implements IElemental {
   protected void entityInit() {
   }
 
+  protected double getSpeed() {
+    return 0.14d;
+  }
 
   public EntityMagicMissile(World worldIn, EntityLivingBase shooter, double x, double y, double z, double accX, double accY, double accZ) {
     super(worldIn);
@@ -52,14 +55,16 @@ public class EntityMagicMissile extends Entity implements IElemental {
     this.setSize(1.0F, 1.0F);
     this.setLocationAndAngles(x, y, z, this.rotationYaw, this.rotationPitch);
     this.setPosition(x, y, z);
+
+    Vec3d vec = new Vec3d(0, 0, 0);
     double d0 = (double) MathHelper.sqrt(accX * accX + accY * accY + accZ * accZ);
-    this.accelerationX = accX / d0 * 0.1D;
-    this.accelerationY = accY / d0 * 0.1D;
-    this.accelerationZ = accZ / d0 * 0.1D;
+    this.accelerationX = accX / d0 * getSpeed();
+    this.accelerationY = accY / d0 * getSpeed();
+    this.accelerationZ = accZ / d0 * getSpeed();
   }
 
   public boolean canBeCollidedWith() {
-    return false;
+    return true;
   }
 
   public float getCollisionBorderSize() {
@@ -83,7 +88,6 @@ public class EntityMagicMissile extends Entity implements IElemental {
     }
   }
 
-
   /**
    * Gets how bright this entity is.
    */
@@ -106,10 +110,11 @@ public class EntityMagicMissile extends Entity implements IElemental {
       }
 
       ++this.ticksInAir;
-      RayTraceResult raytraceresult = forwardsRaycast(this, true, ticksInAir >= 25, shootingEntity);
+      RayTraceResult rayTraceResult = forwardsRaycast(this, true, ticksInAir >= 25, shootingEntity);
+      //RayTraceResult rayTraceResult = ProjectileHelper.forwardsRaycast(this, true, ticksInAir >= 25, shootingEntity);
 
-      if (raytraceresult != null) {
-        onImpact(raytraceresult);
+      if (rayTraceResult != null) {
+        onImpact(rayTraceResult);
       }
 
       posX += motionX;
@@ -241,7 +246,7 @@ public class EntityMagicMissile extends Entity implements IElemental {
   }
 
   public void setExplosionPower(int explosionPower) {
-    explosionPower = explosionPower;
+    this.explosionPower = explosionPower;
   }
 
   public Element getElemental() {
@@ -252,34 +257,27 @@ public class EntityMagicMissile extends Entity implements IElemental {
   /**
    * Ray trace code from ProjectileHelper, with added option to detect liquids
    */
-  public static RayTraceResult forwardsRaycast(Entity projectile, boolean includeEntities, boolean ignoreExcludedEntity, Entity excludedEntity) {
-    double d0 = projectile.posX;
-    double d1 = projectile.posY;
-    double d2 = projectile.posZ;
-    double d3 = projectile.motionX;
-    double d4 = projectile.motionY;
-    double d5 = projectile.motionZ;
-    World world = projectile.world;
-    Vec3d vec3d = new Vec3d(d0, d1, d2);
-    Vec3d vec3d1 = new Vec3d(d0 + d3, d1 + d4, d2 + d5);
-    RayTraceResult raytraceresult = world.rayTraceBlocks(vec3d, vec3d1, true, false, false);
+  public RayTraceResult forwardsRaycast(Entity projectile, boolean includeEntities, boolean ignoreExcludedEntity, Entity excludedEntity) {
+    Vec3d pos = new Vec3d(posX, posY, posZ);
+    Vec3d direction = new Vec3d(posX + motionX, posY + motionY, posZ + motionZ);
+    RayTraceResult result1 = world.rayTraceBlocks(pos, direction, getStopOnLiquid(), false, false);
 
     if (includeEntities) {
-      if (raytraceresult != null) {
-        vec3d1 = new Vec3d(raytraceresult.hitVec.x, raytraceresult.hitVec.y, raytraceresult.hitVec.z);
+      if (result1 != null) {
+        direction = new Vec3d(result1.hitVec.x, result1.hitVec.y, result1.hitVec.z);
       }
 
       Entity entity = null;
-      List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(projectile, projectile.getEntityBoundingBox().expand(d3, d4, d5).grow(1.0D));
+      List<Entity> entitiesInContact = world.getEntitiesWithinAABBExcludingEntity(projectile, projectile.getEntityBoundingBox().expand(motionX, motionY, motionZ).grow(1.0D));
       double d6 = 0.0D;
 
-      for (Entity entity1 : list) {
-        if (entity1.canBeCollidedWith() && (ignoreExcludedEntity || !entity1.isEntityEqual(excludedEntity)) && !entity1.noClip) {
+      for (Entity entity1 : entitiesInContact) {
+        if (entity1.canBeCollidedWith() && !(entity1 instanceof EntityMagicMissile) && (ignoreExcludedEntity || !entity1.isEntityEqual(excludedEntity)) && !entity1.noClip) {
           AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow(0.30000001192092896D);
-          RayTraceResult result = axisalignedbb.calculateIntercept(vec3d, vec3d1);
+          RayTraceResult result2 = axisalignedbb.calculateIntercept(pos, direction);
 
-          if (result != null) {
-            double d7 = vec3d.squareDistanceTo(result.hitVec);
+          if (result2 != null) {
+            double d7 = pos.squareDistanceTo(result2.hitVec);
 
             if (d7 < d6 || d6 == 0.0D) {
               entity = entity1;
@@ -290,11 +288,11 @@ public class EntityMagicMissile extends Entity implements IElemental {
       }
 
       if (entity != null) {
-        raytraceresult = new RayTraceResult(entity);
+        result1 = new RayTraceResult(entity);
       }
     }
 
-    return raytraceresult;
+    return result1;
   }
 
   protected boolean getStopOnLiquid() {
