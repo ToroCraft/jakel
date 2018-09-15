@@ -6,7 +6,7 @@ import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.torocraft.jakel.entities.EntityMagicFireball;
+import net.torocraft.jakel.entities.EntityMagicMissile;
 import net.torocraft.jakel.loot.Element;
 
 public class AttackApi {
@@ -36,19 +36,18 @@ public class AttackApi {
   }
 
   public static void largeFireBall(EntityLivingBase shooter, Element element, World world, Vec3d pos, Vec3d vel, int explosionPower) {
-    EntityMagicFireball fireball = new EntityMagicFireball(world, shooter, pos.x, pos.y, pos.z, vel.x, vel.y, vel.z);
-    fireball.explosionPower = explosionPower;
-    fireball.elemental = element;
-    System.out.println("setting element fireball " + element);
-    fireball.setSize(1, 1);
-    world.spawnEntity(fireball);
+    EntityMagicMissile missile = EntityMagicMissile.getElementalMissile(element, world, shooter, pos.x, pos.y, pos.z, vel.x, vel.y, vel.z);
+    missile.explosionPower = explosionPower;
+    missile.elemental = element;
+    missile.setSize(1, 1);
+    world.spawnEntity(missile);
     world.playEvent(null, 1016, new BlockPos(pos), 0);
   }
 
   public static void smallFireBall(EntityLivingBase shooter, Element element, World world, Vec3d pos, Vec3d vel) {
-    EntityMagicFireball fireball = new EntityMagicFireball(world, shooter, pos.x, pos.y, pos.z, vel.x, vel.y, vel.z);
-    fireball.elemental = element;
-    world.spawnEntity(fireball);
+    EntityMagicMissile missile = EntityMagicMissile.getElementalMissile(element, world, shooter, pos.x, pos.y, pos.z, vel.x, vel.y, vel.z);
+    missile.elemental = element;
+    world.spawnEntity(missile);
     world.playEvent(null, 1016, new BlockPos(pos), 0);
   }
 

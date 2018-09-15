@@ -14,22 +14,22 @@ import net.minecraft.init.Items;
 import net.minecraft.util.ResourceLocation;
 import net.torocraft.jakel.loot.Element;
 
-public class RenderMagicFireball extends Render<EntityMagicFireball> {
+public class RenderMagicMissile extends Render<EntityMagicMissile> {
 
   private final float scale;
 
-  public RenderMagicFireball(RenderManager renderManagerIn) {
+  public RenderMagicMissile(RenderManager renderManagerIn) {
     this(renderManagerIn, 0.5f);
   }
 
 
-  public RenderMagicFireball(RenderManager renderManagerIn, float scaleIn) {
+  public RenderMagicMissile(RenderManager renderManagerIn, float scaleIn) {
     super(renderManagerIn);
     this.scale = scaleIn;
   }
 
   @Override
-  public void doRender(EntityMagicFireball entity, double x, double y, double z, float entityYaw, float partialTicks) {
+  public void doRender(EntityMagicMissile entity, double x, double y, double z, float entityYaw, float partialTicks) {
     GlStateManager.pushMatrix();
     this.bindEntityTexture(entity);
     GlStateManager.translate((float) x, (float) y, (float) z);
@@ -86,7 +86,7 @@ public class RenderMagicFireball extends Render<EntityMagicFireball> {
 
   @Nullable
   @Override
-  protected ResourceLocation getEntityTexture(EntityMagicFireball entity) {
+  protected ResourceLocation getEntityTexture(EntityMagicMissile entity) {
     return TextureMap.LOCATION_BLOCKS_TEXTURE;
   }
 
