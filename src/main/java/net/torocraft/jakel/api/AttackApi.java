@@ -1,17 +1,50 @@
 package net.torocraft.jakel.api;
 
 import java.util.Random;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.torocraft.jakel.capabilites.CapabilityPlayerData;
 import net.torocraft.jakel.entities.EntityMagicMissile;
 import net.torocraft.jakel.loot.Element;
+import net.torocraft.jakel.loot.IElemental;
+import net.torocraft.jakel.loot.Stats;
 
 public class AttackApi {
 
   private static final Random rand = new Random();
+
+  public static boolean attackWithMagic(EntityLivingBase attacker, Entity missile, Entity target) {
+    DamageSource source = getMagicalDamageSource(attacker, missile);
+
+    float damage = 1f;
+
+    if (attacker instanceof EntityPlayer) {
+      damage = applyDamageModifiers((EntityPlayer) attacker, damage);
+    }
+    return target.attackEntityFrom(source, damage);
+  }
+
+  private static float applyDamageModifiers(EntityPlayer attacker, float damage) {
+    Stats stats = CapabilityPlayerData.get(attacker).stats;
+    System.out.println("attacking with STATS: " + stats);
+    return damage;
+  }
+
+  private static DamageSource getMagicalDamageSource(EntityLivingBase attacker, Entity missile) {
+    Element element = Element.PHYSICAL;
+    if (missile instanceof IElemental) {
+      element = ((IElemental) missile).getElemental();
+    }
+    String type = element.toString().toLowerCase() + "_magic";
+    return new EntityDamageSourceIndirect(type, missile, attacker);
+  }
 
   public static Vec3d inFrontOf(EntityLivingBase entity, double distance) {
     Vec3d pos = entity.getPositionVector().add(new Vec3d(0d, (double) entity.getEyeHeight(), 0d));

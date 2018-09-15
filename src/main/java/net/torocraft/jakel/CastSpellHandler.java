@@ -60,8 +60,7 @@ public class CastSpellHandler {
     ItemStack stack = player.getHeldItemMainhand();
 
     if (!LootApi.isMagicalConduit(stack)) {
-      System.out.println("Not a magical conduit " + stack);
-      //return;
+      return;
     }
 
     boolean ctrl = Keyboard.isKeyDown(Keyboard.KEY_LCONTROL);
@@ -70,17 +69,10 @@ public class CastSpellHandler {
     ItemStack spellStack = LootApi.getEquippedSpell(player, slot);
 
     if (spellStack.isEmpty()) {
-      System.out.println("No spell equipped to " + slot);
       return;
     }
 
     SpellData spell = CapabilitySpell.get(spellStack);
-
-    if (spell == null) {
-      System.out.println("spell cap missing??? " + slot);
-    }
-
-    System.out.println("casting spell from client " + spell.element);
 
     event.setCanceled(true);
 

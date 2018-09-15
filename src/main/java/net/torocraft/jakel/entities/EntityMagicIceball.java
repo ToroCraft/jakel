@@ -26,13 +26,29 @@ public class EntityMagicIceball extends EntityMagicMissile {
   }
 
   @Override
+  protected float handleInWater(float motionFactor) {
+    //world.setBlockState(new BlockPos(this), Blocks.ICE.getDefaultState());
+    setDead();
+    return 0.1f;
+  }
+
+  @Override
   protected EnumParticleTypes getParticleType() {
     return EnumParticleTypes.SNOW_SHOVEL;
   }
 
   @Override
+  protected boolean getStopOnLiquid() {
+    return true;
+  }
+
+  @Override
   protected void handleGroundImpact(BlockPos pos, EnumFacing sideHit) {
     if (world.getBlockState(pos).getBlock() == Blocks.SNOW_LAYER) {
+      return;
+    }
+    if (world.getBlockState(pos).getBlock() == Blocks.WATER) {
+      world.setBlockState(pos, Blocks.ICE.getDefaultState());
       return;
     }
     BlockPos blockpos = pos.offset(sideHit);

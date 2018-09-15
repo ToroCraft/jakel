@@ -24,7 +24,6 @@ public class MessageCastSpellHandlerWorker implements Runnable {
       return;
     }
     SpellData spell = CapabilitySpell.get(spellItemStack);
-    System.out.println("casting spell " + spell.element);
     spell.type.cast(player, spell, buildTargetObj());
   }
 

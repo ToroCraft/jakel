@@ -18,6 +18,7 @@ public class RenderMagicMissile extends Render<EntityMagicMissile> {
 
   private final float scale;
 
+
   public RenderMagicMissile(RenderManager renderManagerIn) {
     this(renderManagerIn, 0.5f);
   }
