@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.torocraft.jakel.api.LootApi;
 import net.torocraft.jakel.capabilites.CapabilitySpell;
+import net.torocraft.jakel.spells.ISpellCaster;
 import net.torocraft.jakel.spells.SpellData;
 import net.torocraft.jakel.spells.SpellTarget;
 
@@ -20,11 +21,10 @@ public class MessageCastSpellHandlerWorker implements Runnable {
   @Override
   public void run() {
     ItemStack spellItemStack = LootApi.getEquippedSpell(player, message.slot);
-    if (spellItemStack.isEmpty()) {
+    if (spellItemStack.isEmpty() || !(spellItemStack.getItem() instanceof ISpellCaster)) {
       return;
     }
-    SpellData spell = CapabilitySpell.get(spellItemStack);
-    spell.type.cast(player, spell, buildTargetObj());
+    ((ISpellCaster)spellItemStack.getItem()).cast(player, spellItemStack, buildTargetObj());
   }
 
   private SpellTarget buildTargetObj() {

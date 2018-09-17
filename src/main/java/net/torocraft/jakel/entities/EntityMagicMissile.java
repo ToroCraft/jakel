@@ -6,6 +6,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
@@ -24,7 +27,6 @@ import net.torocraft.jakel.loot.IElemental;
 
 public class EntityMagicMissile extends Entity implements IElemental {
 
-  protected int explosionPower = 0;
   protected Element elemental = Element.PHYSICAL;
   public EntityLivingBase shootingEntity;
   private int ticksAlive;
@@ -32,6 +34,15 @@ public class EntityMagicMissile extends Entity implements IElemental {
   public double accelerationX;
   public double accelerationY;
   public double accelerationZ;
+
+  private static final DataParameter<Float> DAMAGE_MULTIPLIER = EntityDataManager.createKey(EntityMagicMissile.class, DataSerializers.FLOAT);
+  private static final DataParameter<Float> GRAVITY = EntityDataManager.createKey(EntityMagicMissile.class, DataSerializers.FLOAT);
+  private static final DataParameter<Float> SIZE = EntityDataManager.createKey(EntityMagicMissile.class, DataSerializers.FLOAT);
+
+  /*
+   * will be only server only
+   */
+  protected int explosionPower = 0;
 
   public static void initRender() {
     RenderingRegistry.registerEntityRenderingHandler(EntityMagicMissile.class, RenderMagicMissile::new);
@@ -42,15 +53,45 @@ public class EntityMagicMissile extends Entity implements IElemental {
     setSize(0.3125F, 0.3125F);
   }
 
+  @Override
   protected void entityInit() {
+    getDataManager().register(DAMAGE_MULTIPLIER, 1f);
+    getDataManager().register(GRAVITY, 0f);
+    getDataManager().register(SIZE, 0.3f);
+    setSize(getSize(), getSize());
+  }
+
+  public void setDamageMultiplier(float damage) {
+    getDataManager().set(DAMAGE_MULTIPLIER, damage);
+  }
+
+  public float getDamageMultiplier() {
+    return getDataManager().get(DAMAGE_MULTIPLIER);
+  }
+
+  public void setGravity(float gravity) {
+    getDataManager().set(GRAVITY, gravity);
+  }
+
+  public float getGravity() {
+    return getDataManager().get(GRAVITY);
+  }
+
+  public void setSize(float size) {
+    getDataManager().set(SIZE, size);
+    setSize(size, size);
+  }
+
+  public float getSize() {
+    return getDataManager().get(SIZE);
   }
 
   protected double getSpeed() {
-    return 0.14d;
+    return 0.1d;
   }
 
-  public EntityMagicMissile(World worldIn, EntityLivingBase shooter, double x, double y, double z, double accX, double accY, double accZ) {
-    super(worldIn);
+  public EntityMagicMissile(EntityLivingBase shooter, double x, double y, double z, double accX, double accY, double accZ) {
+    super(shooter.world);
     this.shootingEntity = shooter;
     this.setSize(1.0F, 1.0F);
     this.setLocationAndAngles(x, y, z, this.rotationYaw, this.rotationPitch);
@@ -71,20 +112,20 @@ public class EntityMagicMissile extends Entity implements IElemental {
     return 1.0F;
   }
 
-  public static EntityMagicMissile getElementalMissile(Element element, World worldIn, EntityLivingBase shooter, double x, double y, double z, double accX, double accY, double accZ) {
+  public static EntityMagicMissile getElementalMissile(Element element, EntityLivingBase shooter, double x, double y, double z, double accX, double accY, double accZ) {
     switch (element) {
       case FIRE:
-        return new EntityMagicFireball(worldIn, shooter, x, y, z, accX, accY, accZ);
+        return new EntityMagicFireball(shooter, x, y, z, accX, accY, accZ);
       case LIGHTNING:
-        return new EntityMagicLightningball(worldIn, shooter, x, y, z, accX, accY, accZ);
+        return new EntityMagicLightningball(shooter, x, y, z, accX, accY, accZ);
       case WITHER:
-        return new EntityMagicWitherball(worldIn, shooter, x, y, z, accX, accY, accZ);
+        return new EntityMagicWitherball(shooter, x, y, z, accX, accY, accZ);
       case COLD:
-        return new EntityMagicIceball(worldIn, shooter, x, y, z, accX, accY, accZ);
+        return new EntityMagicIceball(shooter, x, y, z, accX, accY, accZ);
       case POISON:
-        return new EntityMagicSlimeball(worldIn, shooter, x, y, z, accX, accY, accZ);
+        return new EntityMagicSlimeball(shooter, x, y, z, accX, accY, accZ);
       default:
-        return new EntityMagicMissile(worldIn, shooter, x, y, z, accX, accY, accZ);
+        return new EntityMagicMissile(shooter, x, y, z, accX, accY, accZ);
     }
   }
 
@@ -197,7 +238,6 @@ public class EntityMagicMissile extends Entity implements IElemental {
   protected void onImpact(RayTraceResult result) {
     if (!world.isRemote) {
       if (result == null) {
-        System.out.println("NULL RAYTRACE RESULT");
         return;
       }
       if (result.entityHit != null) {
@@ -210,8 +250,13 @@ public class EntityMagicMissile extends Entity implements IElemental {
     }
   }
 
+  @Override
+  public boolean isInRangeToRenderDist(double distance) {
+    return distance < 10000;
+  }
+
   protected void handleEntityImpact(Entity entity) {
-    boolean attacked = AttackApi.attackWithMagic(shootingEntity, this, entity);
+    boolean attacked = AttackApi.attackWithMagic(shootingEntity, getDamageMultiplier(), this, entity);
     if (attacked) {
       handleEntityWasDamaged(entity);
     }

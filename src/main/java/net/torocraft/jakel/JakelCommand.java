@@ -14,15 +14,14 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.torocraft.jakel.api.EnchantApi;
 import net.torocraft.jakel.capabilites.CapabilitySpell;
 import net.torocraft.jakel.items.ItemSpell;
+import net.torocraft.jakel.items.Items;
 import net.torocraft.jakel.spells.SpellData;
-import net.torocraft.jakel.spells.Spells;
 import net.torocraft.jakel.traits.Type;
 
 public class JakelCommand extends CommandBase {
@@ -72,10 +71,10 @@ public class JakelCommand extends CommandBase {
     }
     EntityPlayer player = (EntityPlayer) sender;
     List<ItemStack> spells = new ArrayList<>();
-    for(Spells type : Spells.values()) {
-      ItemStack spell = new ItemStack(ItemSpell.INSTANCE);
+    for(Items itemCode: Items.values()) {
+
+      ItemStack spell = new ItemStack(itemCode.getInstance());
       SpellData data = CapabilitySpell.get(spell);
-      data.type = type;
       spells.add(spell);
     }
     dropItems(player, spells);

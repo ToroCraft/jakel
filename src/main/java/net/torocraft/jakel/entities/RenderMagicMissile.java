@@ -16,17 +16,8 @@ import net.torocraft.jakel.loot.Element;
 
 public class RenderMagicMissile extends Render<EntityMagicMissile> {
 
-  private final float scale;
-
-
   public RenderMagicMissile(RenderManager renderManagerIn) {
-    this(renderManagerIn, 0.5f);
-  }
-
-
-  public RenderMagicMissile(RenderManager renderManagerIn, float scaleIn) {
     super(renderManagerIn);
-    this.scale = scaleIn;
   }
 
   @Override
@@ -36,7 +27,9 @@ public class RenderMagicMissile extends Render<EntityMagicMissile> {
     GlStateManager.translate((float) x, (float) y, (float) z);
     GlStateManager.enableRescaleNormal();
 
-    GlStateManager.scale(this.scale, this.scale, this.scale);
+    float scale = entity.getSize();
+
+    GlStateManager.scale(scale, scale, scale);
     TextureAtlasSprite textureatlassprite = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getParticleIcon(Items.FIRE_CHARGE);
     Tessellator tessellator = Tessellator.getInstance();
     BufferBuilder bufferbuilder = tessellator.getBuffer();

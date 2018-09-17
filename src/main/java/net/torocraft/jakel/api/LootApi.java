@@ -37,7 +37,7 @@ public class LootApi {
   }
 
   public static boolean notASpell(ItemStack item) {
-    return item == null || item.isEmpty() || item.getItem() != ItemSpell.INSTANCE;
+    return item == null || item.isEmpty() || !(item.getItem() instanceof ItemSpell);
   }
 
   public static boolean isASpell(ItemStack item) {

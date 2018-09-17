@@ -9,21 +9,21 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import net.torocraft.jakel.capabilites.CapabilityPlayerData;
 import net.torocraft.jakel.entities.EntityMagicMissile;
 import net.torocraft.jakel.loot.Element;
 import net.torocraft.jakel.loot.IElemental;
 import net.torocraft.jakel.loot.Stats;
+import net.torocraft.jakel.spells.SpellData;
+import net.torocraft.jakel.spells.SpellTarget;
+import net.torocraft.jakel.spells.SpellTarget.Type;
 
 public class AttackApi {
 
   private static final Random rand = new Random();
 
-  public static boolean attackWithMagic(EntityLivingBase attacker, Entity missile, Entity target) {
+  public static boolean attackWithMagic(EntityLivingBase attacker, float damage, Entity missile, Entity target) {
     DamageSource source = getMagicalDamageSource(attacker, missile);
-
-    float damage = 1f;
 
     if (attacker instanceof EntityPlayer) {
       damage = applyDamageModifiers((EntityPlayer) attacker, damage);
@@ -31,8 +31,11 @@ public class AttackApi {
     return target.attackEntityFrom(source, damage);
   }
 
-  private static float applyDamageModifiers(EntityPlayer attacker, float damage) {
+  private static float applyDamageModifiers(EntityPlayer attacker,float damage) {
     Stats stats = CapabilityPlayerData.get(attacker).stats;
+
+    System.out.println("attacking with base damage: " + damage);
+
     System.out.println("attacking with STATS: " + stats);
     return damage;
   }
@@ -68,36 +71,42 @@ public class AttackApi {
     return new Vec3d(pos.x + x, pos.y, pos.z + z);
   }
 
-  public static void largeMagicMissile(EntityLivingBase shooter, Element element, World world, Vec3d pos, Vec3d vel, int explosionPower) {
-    EntityMagicMissile missile = EntityMagicMissile.getElementalMissile(element, world, shooter, pos.x, pos.y, pos.z, vel.x, vel.y, vel.z);
+  public static void magicMissile(Element element, float damageMultiplier, EntityLivingBase shooter, Vec3d pos, Vec3d vel, int explosionPower, float size) {
+    EntityMagicMissile missile = EntityMagicMissile.getElementalMissile(element, shooter, pos.x, pos.y, pos.z, vel.x, vel.y, vel.z);
     missile.setExplosionPower(explosionPower);
-    missile.setSize(1, 1);
-    world.spawnEntity(missile);
-    world.playEvent(null, 1016, new BlockPos(pos), 0);
+    missile.setSize(size);
+    missile.setDamageMultiplier(damageMultiplier);
+    shooter.world.spawnEntity(missile);
+    shooter.world.playEvent(null, 1016, new BlockPos(pos), 0);
   }
 
-  public static void smallMagicMissile(EntityLivingBase shooter, Element element, World world, Vec3d pos, Vec3d vel) {
-    EntityMagicMissile missile = EntityMagicMissile.getElementalMissile(element, world, shooter, pos.x, pos.y, pos.z, vel.x, vel.y, vel.z);
-    world.spawnEntity(missile);
-    world.playEvent(null, 1016, new BlockPos(pos), 0);
+  public static void lightning(EntityLivingBase shooter, SpellData spell, Vec3d pos) {
+    shooter.world.addWeatherEffect(new EntityLightningBolt(shooter.world, pos.x, pos.y, pos.z, false));
   }
 
-  public static void lightning(EntityLivingBase shooter, Element element, World world, Vec3d pos) {
-    world.addWeatherEffect(new EntityLightningBolt(world, pos.x, pos.y, pos.z, false));
-  }
-
-  public static void meteors(EntityLivingBase shooter, Element element, World world, Vec3d pos, double radius) {
+  public static void meteors(Element element, float damageMultiplier, EntityLivingBase shooter, Vec3d pos, double radius) {
     double tempRadius = radius / 2;
     for (int i = 0; i < 100; i++) {
       tempRadius += 0.005d * radius;
       Vec3d end = randomSpotInRadius(pos, tempRadius);
       Vec3d start = end.addVector(0, (rand.nextDouble() * 100) + 20, 0);
-      smallMagicMissile(shooter, element, world, start, end.subtract(start));
+      magicMissile(element, damageMultiplier, shooter, start, end.subtract(start), 0, 0.3f);
     }
   }
 
-  public static void asteroid(EntityLivingBase shooter, Element element, World world, Vec3d pos) {
+  public static void asteroid(Element element, float damageMultiplier, EntityLivingBase shooter, Vec3d pos) {
     Vec3d start = pos.addVector(0, 50, 0);
-    largeMagicMissile(shooter, element, world, start, pos.subtract(start), 10);
+    magicMissile(element, damageMultiplier, shooter, start, pos.subtract(start), 10, 2f);
+  }
+
+  public static Vec3d targetLocation(SpellTarget target) {
+    Vec3d pos = null;
+    if (Type.BLOCK.equals(target.type)) {
+      pos = new Vec3d(target.block.getX() + 0.5, target.block.getY(), target.block.getZ() + 0.5);
+    }
+    if (Type.ENTITY.equals(target.type)) {
+      pos = target.entity.getPositionVector();
+    }
+    return pos;
   }
 }

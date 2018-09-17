@@ -21,8 +21,8 @@ public class EntityMagicFireball extends EntityMagicMissile {
     elemental = Element.FIRE;
   }
 
-  public EntityMagicFireball(World worldIn, EntityLivingBase shooter, double x, double y, double z, double accX, double accY, double accZ) {
-    super(worldIn, shooter, x, y, z, accX, accY, accZ);
+  public EntityMagicFireball(EntityLivingBase shooter, double x, double y, double z, double accX, double accY, double accZ) {
+    super(shooter, x, y, z, accX, accY, accZ);
     elemental = Element.FIRE;
   }
 

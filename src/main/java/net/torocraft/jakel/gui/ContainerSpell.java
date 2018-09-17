@@ -11,10 +11,10 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.server.SPacketHeldItemChange;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.torocraft.jakel.Jakel;
+import net.torocraft.jakel.capabilites.CapabilitySpell;
 import net.torocraft.jakel.loot.Element;
 import net.torocraft.jakel.network.MessageSyncSpell;
 import net.torocraft.jakel.spells.SpellData;
@@ -25,9 +25,9 @@ public class ContainerSpell extends Container {
   private final SpellData spell;
   private final int heldItemIndex;
 
-  public ContainerSpell(EntityPlayer player, SpellData spell, World world) {
+  public ContainerSpell(EntityPlayer player, ItemStack spellStack, World world) {
+    this.spell = CapabilitySpell.get(spellStack);
     this.inventory = spell.inventory;
-    this.spell = spell;
     heldItemIndex = player.inventory.currentItem;
     inventory.openInventory(player);
     placeSlots(player, inventory);

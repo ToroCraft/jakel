@@ -22,7 +22,7 @@ public class GuiHandler implements IGuiHandler {
   @Override
   public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
     if (ID == SPELL_GUI) {
-      SpellData spell = getHeldSpell(player);
+      ItemStack spell = getHeldSpell(player);
       if (spell == null) {
         return null;
       }
@@ -34,7 +34,7 @@ public class GuiHandler implements IGuiHandler {
   @Override
   public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
     if (ID == SPELL_GUI) {
-      SpellData spell = getHeldSpell(player);
+      ItemStack spell = getHeldSpell(player);
       if (spell == null) {
         return null;
       }
@@ -43,11 +43,11 @@ public class GuiHandler implements IGuiHandler {
     return null;
   }
 
-  private SpellData getHeldSpell(EntityPlayer player) {
+  private ItemStack getHeldSpell(EntityPlayer player) {
     ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
-    if (stack.isEmpty() || stack.getItem() != ItemSpell.INSTANCE) {
+    if (stack.isEmpty() || !(stack.getItem() instanceof ItemSpell) || CapabilitySpell.get(stack) == null) {
       return null;
     }
-    return CapabilitySpell.get(stack);
+    return stack;
   }
 }

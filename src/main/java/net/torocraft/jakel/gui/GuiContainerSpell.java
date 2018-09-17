@@ -6,6 +6,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.torocraft.jakel.Jakel;
@@ -21,13 +22,11 @@ public class GuiContainerSpell extends GuiContainer {
   private int guiX = 0;
   private int guiY = 0;
 
-  private final SpellData spell;
   private final String spellName;
 
-  public GuiContainerSpell(EntityPlayer player, SpellData spell, World world) {
-    super(new ContainerSpell(player, spell, world));
-    this.spell = spell;
-    this.spellName = spell.type.toString().toLowerCase();
+  public GuiContainerSpell(EntityPlayer player, ItemStack spellStack, World world) {
+    super(new ContainerSpell(player, spellStack, world));
+    this.spellName = spellStack.getUnlocalizedName();
   }
 
   @Override

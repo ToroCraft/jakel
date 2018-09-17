@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.torocraft.jakel.Jakel;
 import net.torocraft.jakel.entities.Entities;
 import net.torocraft.jakel.items.ItemSpell;
+import net.torocraft.jakel.items.Items;
 
 public class ClientProxy extends CommonProxy {
 
@@ -28,7 +29,7 @@ public class ClientProxy extends CommonProxy {
   @Override
   public void init(FMLInitializationEvent e) {
     super.init(e);
-    ItemSpell.registerRenders();
+    Items.initAllRenders();
   }
 
 

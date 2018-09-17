@@ -1,12 +1,11 @@
 package net.torocraft.jakel.spells;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.torocraft.jakel.loot.Element;
 import net.torocraft.jakel.nbt.NbtField;
+import net.torocraft.jakel.nbt.NbtSerializer;
 
 public class SpellData {
-
-  @NbtField
-  public Spells type = Spells.FIREBALL_SMALL;
 
   @NbtField
   public Element element = Element.PHYSICAL;
@@ -14,8 +13,11 @@ public class SpellData {
   @NbtField(genericType = SpellDataInventory.class)
   public SpellDataInventory inventory = new SpellDataInventory();
 
-  public String getUnlocalizedName() {
-    return "spell." + type.toString().toLowerCase() + ".name";
+  @Override
+  public String toString() {
+    NBTTagCompound c = new NBTTagCompound();
+    NbtSerializer.write(c, this);
+    return c.toString();
   }
 
 }

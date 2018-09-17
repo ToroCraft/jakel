@@ -23,7 +23,7 @@ public enum Entities {
     String entityName = Jakel.MODID.toLowerCase() + "_" + this.toString().toLowerCase();
     ResourceLocation registryName = new ResourceLocation(Jakel.MODID, entityName);
     int id = this.ordinal();
-    int trackingRange = 100;
+    int trackingRange = 150;
     int updateFrequency = 1;
     boolean sendsVelocityUpdates = true;
     EntityRegistry.registerModEntity(registryName, clazz, entityName, id, Jakel.INSTANCE, trackingRange, updateFrequency, sendsVelocityUpdates);
