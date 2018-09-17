@@ -256,7 +256,7 @@ public class EntityMagicMissile extends Entity implements IElemental {
   }
 
   protected void handleEntityImpact(Entity entity) {
-    boolean attacked = AttackApi.attackWithMagic(shootingEntity, getDamageMultiplier(), this, entity);
+    boolean attacked = AttackApi.attackWithMagic(shootingEntity, getDamageMultiplier(), elemental, this, entity);
     if (attacked) {
       handleEntityWasDamaged(entity);
     }

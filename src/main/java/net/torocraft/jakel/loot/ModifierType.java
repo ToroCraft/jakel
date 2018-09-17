@@ -22,8 +22,8 @@ public enum ModifierType {
     stats.cold += amount;
   }),
 
-  HOLY((stats, amount) -> {
-    stats.holy += amount;
+  POISON((stats, amount) -> {
+    stats.poison += amount;
   }),
 
   MOVEMENT_SPEED((stats, amount) -> {

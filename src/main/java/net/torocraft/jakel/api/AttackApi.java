@@ -22,21 +22,46 @@ public class AttackApi {
 
   private static final Random rand = new Random();
 
-  public static boolean attackWithMagic(EntityLivingBase attacker, float damage, Entity missile, Entity target) {
+  public static boolean attackWithMagic(EntityLivingBase attacker, float damageMultiplier, Element element, Entity missile, Entity target) {
     DamageSource source = getMagicalDamageSource(attacker, missile);
 
+    float damage = 1;
     if (attacker instanceof EntityPlayer) {
-      damage = applyDamageModifiers((EntityPlayer) attacker, damage);
+      damage = applyDamageModifiers((EntityPlayer) attacker, damageMultiplier, element);
     }
+
     return target.attackEntityFrom(source, damage);
   }
 
-  private static float applyDamageModifiers(EntityPlayer attacker,float damage) {
+  private static float applyDamageModifiers(EntityPlayer attacker, float damageMultiplier, Element element) {
     Stats stats = CapabilityPlayerData.get(attacker).stats;
 
-    System.out.println("attacking with base damage: " + damage);
+    float damage = stats.damage * damageMultiplier;
+
+    switch (element) {
+      case FIRE:
+        damage *= stats.fire;
+        break;
+      case LIGHTNING:
+        damage *= stats.lightning;
+        break;
+      case WITHER:
+        damage *= stats.wither;
+        break;
+      case COLD:
+        damage *= stats.cold;
+        break;
+      case POISON:
+        damage *= stats.poison;
+        break;
+    }
 
     System.out.println("attacking with STATS: " + stats);
+
+    System.out.println("attacking with base damage modifier: " + damageMultiplier + " " + element);
+
+    System.out.println("FINAL DAMAGE: " + damage);
+
     return damage;
   }
 

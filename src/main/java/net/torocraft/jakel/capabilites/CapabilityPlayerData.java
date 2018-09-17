@@ -58,7 +58,7 @@ public class CapabilityPlayerData implements INBTSerializable<NBTTagCompound> {
     }
   }
 
-  //@SubscribeEvent
+  @SubscribeEvent
   public static void onEquipmentChange(LivingEquipmentChangeEvent event) {
     if (event.getEntity().world.isRemote) {
       return;

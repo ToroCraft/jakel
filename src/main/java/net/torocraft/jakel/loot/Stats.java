@@ -7,61 +7,61 @@ import net.torocraft.jakel.nbt.NbtSerializer;
 public class Stats {
 
   @NbtField
-  public int damage;
+  public float damage = 1f;
 
   @NbtField
-  public int defense;
+  public float defense = 1f;
 
   @NbtField
-  public int thorns;
+  public float thorns = 0f;
 
   @NbtField
-  public int lifePerHit;
+  public float lifePerHit = 0f;
 
   @NbtField
-  public int lifePerKill;
+  public float lifePerKill = 0f;
 
   @NbtField
-  public int lifePerTick;
+  public float lifePerTick = 0f;
 
   @NbtField
-  public int criticalHitDamage;
+  public float criticalHitDamage = 0f;
 
   @NbtField
-  public int criticalHitChance;
+  public float criticalHitChance = 0f;
 
   @NbtField
-  public int areaDamage;
+  public float areaDamage = 0f;
 
   @NbtField
-  public float fire;
+  public float fire = 1f;
 
   @NbtField
-  public float lightning;
+  public float lightning = 1f;
 
   @NbtField
-  public float wither;
+  public float wither = 1f;
 
   @NbtField
-  public float cold;
+  public float cold = 1f;
 
   @NbtField
-  public float holy;
+  public float poison = 1f;
 
   @NbtField
-  public float fireResist;
+  public float fireResist = 0f;
 
   @NbtField
-  public float lightningResist;
+  public float lightningResist = 0f;
 
   @NbtField
-  public float witherResist;
+  public float witherResist = 0f;
 
   @NbtField
-  public float coldResist;
+  public float coldResist = 0f;
 
   @NbtField
-  public float holyResist;
+  public float holyResist = 0f;
 
   @Override
   public String toString() {
