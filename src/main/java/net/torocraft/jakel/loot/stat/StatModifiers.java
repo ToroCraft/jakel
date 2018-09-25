@@ -2,7 +2,7 @@ package net.torocraft.jakel.loot.stat;
 
 import net.torocraft.jakel.stats.Stats;
 
-public enum StatModifierType {
+public enum StatModifiers implements IStatModifier {
 
   DAMAGE((stats, amount) -> {
     stats.damage += amount;
@@ -115,14 +115,14 @@ public enum StatModifierType {
     return ((float) amount) / 100;
   }
 
-  private final StatApplier applier;
+  private final IStatModifier modifier;
 
-  StatModifierType(StatApplier applier) {
-    this.applier = applier;
+  StatModifiers(IStatModifier modifier) {
+    this.modifier = modifier;
   }
 
   public void apply(Stats stats, int amount) {
-    applier.apply(stats, amount);
+    modifier.apply(stats, amount);
   }
 
 }
