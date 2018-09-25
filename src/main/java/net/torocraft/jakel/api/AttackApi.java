@@ -13,7 +13,7 @@ import net.torocraft.jakel.capabilites.CapabilityPlayerData;
 import net.torocraft.jakel.entities.EntityMagicMissile;
 import net.torocraft.jakel.loot.Element;
 import net.torocraft.jakel.loot.IElemental;
-import net.torocraft.jakel.loot.Stats;
+import net.torocraft.jakel.stats.Stats;
 import net.torocraft.jakel.spells.SpellData;
 import net.torocraft.jakel.spells.SpellTarget;
 import net.torocraft.jakel.spells.SpellTarget.Type;

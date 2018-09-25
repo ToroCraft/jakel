@@ -1,6 +1,8 @@
-package net.torocraft.jakel.loot;
+package net.torocraft.jakel.loot.stat;
 
-public enum ModifierType {
+import net.torocraft.jakel.stats.Stats;
+
+public enum StatModifierType {
 
   DAMAGE((stats, amount) -> {
     stats.damage += amount;
@@ -113,9 +115,9 @@ public enum ModifierType {
     return ((float) amount) / 100;
   }
 
-  private final Applier applier;
+  private final StatApplier applier;
 
-  ModifierType(Applier applier) {
+  StatModifierType(StatApplier applier) {
     this.applier = applier;
   }
 
@@ -123,9 +125,4 @@ public enum ModifierType {
     applier.apply(stats, amount);
   }
 
-  @FunctionalInterface
-  public interface Applier {
-
-    void apply(Stats stats, int amount);
-  }
 }

@@ -2,15 +2,13 @@ package net.torocraft.jakel.api;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import net.torocraft.jakel.capabilites.CapabilityItemData;
 import net.torocraft.jakel.items.ItemSpell;
 import net.torocraft.jakel.loot.ItemData;
-import net.torocraft.jakel.loot.Stats;
+import net.torocraft.jakel.stats.Stats;
 
 public class LootApi {
 

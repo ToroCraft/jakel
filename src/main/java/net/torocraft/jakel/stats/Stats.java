@@ -1,4 +1,4 @@
-package net.torocraft.jakel.loot;
+package net.torocraft.jakel.stats;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.torocraft.jakel.nbt.NbtField;

@@ -16,7 +16,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.torocraft.jakel.Jakel;
-import net.torocraft.jakel.loot.PlayerData;
+import net.torocraft.jakel.stats.PlayerData;
 import net.torocraft.jakel.nbt.NbtSerializer;
 
 @Mod.EventBusSubscriber

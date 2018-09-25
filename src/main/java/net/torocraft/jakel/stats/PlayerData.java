@@ -1,4 +1,4 @@
-package net.torocraft.jakel.loot;
+package net.torocraft.jakel.stats;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +23,6 @@ public class PlayerData {
     stats.wither = 100;
     mana = 0;
   }
-
-  // add tooltip to magical items
-
-  // remove magical items left right click when spell is slotted in the corresponding hot bar slot
-
-  // create spell item and inventory
 
   public void update(LivingUpdateEvent event) {
     if (event.getEntity().world.getTotalWorldTime() % 100 != 0) {
