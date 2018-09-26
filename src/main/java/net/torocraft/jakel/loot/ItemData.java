@@ -38,11 +38,15 @@ public class ItemData implements IHitHandler, ITickHandler {
 
   @Override
   public void onHit(EntityPlayer player, EntityLivingBase victim, List<Integer> parameters) {
-    // TODO
+    if (hit != null) {
+      hit.onHit(player, victim, parameters);
+    }
   }
 
   @Override
   public void update(EntityPlayer player, List<Integer> parameters) {
-    // TODO
+    if (tick != null) {
+      tick.update(player, parameters);
+    }
   }
 }

@@ -30,7 +30,7 @@ public class LootApi {
 
   public static void applyItem(ItemData item, Stats stats) {
     if (isMagicalItem(item) && item.modifiers != null) {
-      item.modifiers.forEach(m -> m.apply(stats));
+      item.modifiers.forEach(data -> data.type.apply(stats, data.amount));
     }
   }
 

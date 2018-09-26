@@ -59,32 +59,10 @@ public class CapabilityPlayerData implements INBTSerializable<NBTTagCompound> {
   }
 
   @SubscribeEvent
-  public static void onEquipmentChange(LivingEquipmentChangeEvent event) {
-    if (event.getEntity().world.isRemote) {
-      return;
-    }
-    if (event.getEntity() instanceof EntityPlayer) {
-      EntityPlayer player = (EntityPlayer) event.getEntity();
-      get(player).onEquipmentChange(player);
-    }
-  }
-
-  @SubscribeEvent
   public static void onPlayerCloneEvent(PlayerEvent.Clone event) {
     CapabilityPlayerData newData = getCapability(event.getEntityPlayer());
     CapabilityPlayerData oldData = getCapability(event.getOriginal());
     newData.deserializeNBT(oldData.serializeNBT());
-  }
-
-  @SubscribeEvent
-  public static void onLivingUpdateEvent(LivingUpdateEvent event) {
-    if (!(event.getEntityLiving() instanceof EntityPlayer)) {
-      return;
-    }
-    EntityPlayer player = (EntityPlayer) event.getEntityLiving();
-    if (get(player) != null) {
-      CapabilityPlayerData.get(player).update(event);
-    }
   }
 
   public static class Provider implements ICapabilitySerializable<NBTTagCompound> {
