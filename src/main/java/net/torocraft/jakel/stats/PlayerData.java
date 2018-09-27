@@ -20,6 +20,9 @@ public class PlayerData {
    * @return false if cooldown already set and new cooldown could not be applied
    */
   public boolean applyCooldown(SpellSlot slot, float amount) {
+    if (cooldowns == null) {
+      cooldowns = new HashMap<>();
+    }
     Float cooldown = cooldowns.get(slot.toString());
     if (cooldown == null || cooldown <= 0) {
       cooldowns.put(slot.toString(), amount);

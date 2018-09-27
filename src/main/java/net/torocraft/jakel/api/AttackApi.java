@@ -15,6 +15,7 @@ import net.torocraft.jakel.api.LootApi.SpellSlot;
 import net.torocraft.jakel.capabilites.CapabilityPlayerData;
 import net.torocraft.jakel.entities.EntityMagicMissile;
 import net.torocraft.jakel.items.ISpellCaster;
+import net.torocraft.jakel.items.ItemSpell;
 import net.torocraft.jakel.loot.Element;
 import net.torocraft.jakel.loot.IElemental;
 import net.torocraft.jakel.spells.SpellData;
@@ -150,12 +151,17 @@ public class AttackApi {
     PlayerData playerData = CapabilityPlayerData.get(player);
     ISpellCaster spell = (ISpellCaster) spellItemStack.getItem();
 
-    playerData.applyCooldown(slot, spell.cooldown());
+    if (!playerData.applyCooldown(slot, spell.cooldown())){
+      handleCastSpellFailed(player);
+      return;
+    }
 
-    // check mana
-    // apply mana cost
+    if(!playerData.spendMana(spell.manaCost())){
+      handleCastSpellFailed(player);
+      return;
+    }
 
-    AttackApi.castSpell(player, slot, target);
+    spell.cast(player, spellItemStack, target);
   }
 
   private static void handleCastSpellFailed(EntityPlayerMP player) {

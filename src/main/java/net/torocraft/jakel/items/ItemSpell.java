@@ -31,7 +31,7 @@ public abstract class ItemSpell extends Item implements ISpellCaster {
 
   @Override
   public float manaCost() {
-    return 10f;
+    return 2f;
   }
 
   @Override

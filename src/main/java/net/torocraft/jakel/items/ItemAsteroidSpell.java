@@ -50,4 +50,8 @@ public class ItemAsteroidSpell extends ItemSpell {
     }
   }
 
+  @Override
+  public float cooldown() {
+    return 100f;
+  }
 }

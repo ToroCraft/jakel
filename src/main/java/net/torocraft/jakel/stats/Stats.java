@@ -7,6 +7,15 @@ import net.torocraft.jakel.nbt.NbtSerializer;
 public class Stats {
 
   @NbtField
+  public float manaMaximum = 10f;
+
+  @NbtField
+  public float manaPerTick = 0.1f;
+
+  @NbtField
+  public float cooldownPerTick = 0.1f;
+
+  @NbtField
   public float damage = 1f;
 
   @NbtField

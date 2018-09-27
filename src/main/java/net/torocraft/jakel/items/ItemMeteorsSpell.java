@@ -49,4 +49,9 @@ public class ItemMeteorsSpell extends ItemSpell {
       AttackApi.meteors(spell.element, 1f, player, pos, 4);
     }
   }
+
+  @Override
+  public float manaCost() {
+    return 6f;
+  }
 }

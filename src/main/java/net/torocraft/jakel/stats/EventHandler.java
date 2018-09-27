@@ -2,6 +2,7 @@ package net.torocraft.jakel.stats;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -30,6 +31,9 @@ public class EventHandler {
 
   @SubscribeEvent
   public static void onLivingUpdateEvent(LivingUpdateEvent event) {
+    if (event.getEntity().world.isRemote) {
+      return;
+    }
     if (!(event.getEntityLiving() instanceof EntityPlayer)) {
       return;
     }
@@ -39,26 +43,34 @@ public class EventHandler {
     }
   }
 
-
   public static void update(LivingUpdateEvent event, EntityPlayer player, PlayerData data) {
-    if (event.getEntity().world.getTotalWorldTime() % 100 != 0) {
-      return;
-    }
-    applyItemTicks(player);
-
-    // keep cool downs by inventory slot in hot bar, 5 to 8
-
-    // spells will have two inventory slots each, a rune and passive skill
-
-    // only armor can change player stats, spells will only be able affect that one spell
-
-    // scan through items, handle cool downs, sync data to client on important change
-
-    data.mana++;
+    decrementCooldowns(data);
+    incrementMana(data);
+    applyItemTicks(event, player);
   }
 
-  private static void applyItemTicks(EntityPlayer player) {
-    getItems(player).forEach(stack -> tickItem(player, stack));
+  private static void incrementMana(PlayerData data) {
+    if (data.mana > data.stats.manaMaximum) {
+      data.mana = data.stats.manaMaximum;
+      return;
+    }
+    if (data.mana < data.stats.manaMaximum) {
+      data.mana += data.stats.manaPerTick;
+    }
+  }
+
+  private static void decrementCooldowns(PlayerData data) {
+    for (Entry<String, Float> e : data.cooldowns.entrySet()) {
+      if (e.getValue() != null && e.getValue() > 0) {
+        e.setValue(e.getValue() - data.stats.cooldownPerTick);
+      }
+    }
+  }
+
+  private static void applyItemTicks(LivingUpdateEvent event, EntityPlayer player) {
+    if (event.getEntity().world.getTotalWorldTime() % 100 == 0) {
+      getItems(player).forEach(stack -> tickItem(player, stack));
+    }
   }
 
   private static void tickItem(EntityPlayer player, ItemStack stack) {
