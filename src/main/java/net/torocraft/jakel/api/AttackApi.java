@@ -5,18 +5,23 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.torocraft.jakel.api.LootApi.SpellSlot;
 import net.torocraft.jakel.capabilites.CapabilityPlayerData;
 import net.torocraft.jakel.entities.EntityMagicMissile;
+import net.torocraft.jakel.items.ISpellCaster;
 import net.torocraft.jakel.loot.Element;
 import net.torocraft.jakel.loot.IElemental;
-import net.torocraft.jakel.stats.Stats;
 import net.torocraft.jakel.spells.SpellData;
 import net.torocraft.jakel.spells.SpellTarget;
 import net.torocraft.jakel.spells.SpellTarget.Type;
+import net.torocraft.jakel.stats.PlayerData;
+import net.torocraft.jakel.stats.Stats;
 
 public class AttackApi {
 
@@ -133,5 +138,27 @@ public class AttackApi {
       pos = target.entity.getPositionVector();
     }
     return pos;
+  }
+
+  public static void castSpell(EntityPlayerMP player, SpellSlot slot, SpellTarget target) {
+    ItemStack spellItemStack = LootApi.getEquippedSpell(player, slot);
+    if (spellItemStack.isEmpty() || !(spellItemStack.getItem() instanceof ISpellCaster)) {
+      handleCastSpellFailed(player);
+      return;
+    }
+
+    PlayerData playerData = CapabilityPlayerData.get(player);
+    ISpellCaster spell = (ISpellCaster) spellItemStack.getItem();
+
+    playerData.applyCooldown(slot, spell.cooldown());
+
+    // check mana
+    // apply mana cost
+
+    AttackApi.castSpell(player, slot, target);
+  }
+
+  private static void handleCastSpellFailed(EntityPlayerMP player) {
+    // TODO play fail sound
   }
 }

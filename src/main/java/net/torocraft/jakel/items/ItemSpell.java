@@ -9,7 +9,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.torocraft.jakel.Jakel;
 import net.torocraft.jakel.gui.GuiHandler;
-import net.torocraft.jakel.spells.ISpellCaster;
 import net.torocraft.jakel.spells.SpellTarget;
 
 public abstract class ItemSpell extends Item implements ISpellCaster {
@@ -28,6 +27,16 @@ public abstract class ItemSpell extends Item implements ISpellCaster {
   public ActionResult<ItemStack> onItemRightClick(final World world, final EntityPlayer player, final EnumHand hand) {
     player.openGui(Jakel.INSTANCE, GuiHandler.SPELL_GUI, world, 0, 0, 0);
     return super.onItemRightClick(world, player, hand);
+  }
+
+  @Override
+  public float manaCost() {
+    return 10f;
+  }
+
+  @Override
+  public float cooldown() {
+    return 0f;
   }
 
   public abstract void cast(EntityPlayer player, ItemStack spell, SpellTarget target);

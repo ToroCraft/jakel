@@ -2,10 +2,9 @@ package net.torocraft.jakel.network;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.torocraft.jakel.api.AttackApi;
 import net.torocraft.jakel.api.LootApi;
-import net.torocraft.jakel.capabilites.CapabilitySpell;
-import net.torocraft.jakel.spells.ISpellCaster;
-import net.torocraft.jakel.spells.SpellData;
+import net.torocraft.jakel.items.ISpellCaster;
 import net.torocraft.jakel.spells.SpellTarget;
 
 public class MessageCastSpellHandlerWorker implements Runnable {
@@ -20,11 +19,7 @@ public class MessageCastSpellHandlerWorker implements Runnable {
 
   @Override
   public void run() {
-    ItemStack spellItemStack = LootApi.getEquippedSpell(player, message.slot);
-    if (spellItemStack.isEmpty() || !(spellItemStack.getItem() instanceof ISpellCaster)) {
-      return;
-    }
-    ((ISpellCaster)spellItemStack.getItem()).cast(player, spellItemStack, buildTargetObj());
+    AttackApi.castSpell(player, message.slot, buildTargetObj());
   }
 
   private SpellTarget buildTargetObj() {

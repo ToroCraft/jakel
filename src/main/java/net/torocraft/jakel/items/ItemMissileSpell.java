@@ -46,4 +46,5 @@ public class ItemMissileSpell extends ItemSpell {
     SpellData spell = CapabilitySpell.get(spellStack);
     AttackApi.magicMissile(spell.element, 1f, player, target.casterPosition, target.casterLook, 0, 0.4f);
   }
+
 }

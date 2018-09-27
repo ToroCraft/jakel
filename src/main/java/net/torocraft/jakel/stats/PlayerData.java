@@ -1,27 +1,42 @@
 package net.torocraft.jakel.stats;
 
-import java.util.ArrayList;
-import java.util.List;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
-import net.torocraft.jakel.api.LootApi;
-import net.torocraft.jakel.capabilites.CapabilityPlayerData;
+import java.util.HashMap;
+import java.util.Map;
+import net.torocraft.jakel.api.LootApi.SpellSlot;
 import net.torocraft.jakel.nbt.NbtField;
 
 public class PlayerData {
 
   @NbtField
-  public int mana;
+  public float mana;
+
+  @NbtField(genericType = Float.class)
+  public Map<String, Float> cooldowns = new HashMap<>();
 
   @NbtField
   public Stats stats = new Stats();
 
-  public PlayerData() {
-    stats.thorns = 1;
-    stats.wither = 100;
-    mana = 0;
+  /**
+   * @return false if cooldown already set and new cooldown could not be applied
+   */
+  public boolean applyCooldown(SpellSlot slot, float amount) {
+    Float cooldown = cooldowns.get(slot.toString());
+    if (cooldown == null || cooldown <= 0) {
+      cooldowns.put(slot.toString(), amount);
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * @return false if not enough mana, else return true and decrement mana
+   */
+  public boolean spendMana(float amount) {
+    if (mana < amount) {
+      return false;
+    }
+    mana -= amount;
+    return true;
   }
 
 
