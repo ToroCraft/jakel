@@ -1,6 +1,7 @@
 package net.torocraft.jakel.api;
 
 import java.util.ArrayList;
+import java.util.Random;
 import net.minecraft.item.ItemStack;
 import net.torocraft.jakel.capabilites.CapabilityItemData;
 import net.torocraft.jakel.loot.ItemData;
@@ -11,6 +12,14 @@ import net.torocraft.jakel.loot.tick.TickHandlers;
 
 public class EnchantApi {
 
+  // number of magical properties
+
+  // level of property
+
+  // class, weapon or armor
+
+  private static Random rand = new Random();
+
   public static void enchant(ItemStack item) {
     ItemData data = CapabilityItemData.get(item);
     data.modifiers = new ArrayList<>();
@@ -18,6 +27,13 @@ public class EnchantApi {
     data.modifiers.add(create(StatModifiers.FIRE_RESIST, 10));
     data.tick = TickHandlers.DAMAGE_BOOST_FROM_NEARBY_MOBS;
     data.isMagicalConduit = true;
+  }
+
+  private static StatModifierData randomModifier(int level) {
+    StatModifierData data = new StatModifierData();
+    data.amount = amount;
+    data.type = StatModifiers.values()[rand.nextInt(StatModifiers.values().length)];
+    return data;
   }
 
   private static StatModifierData create(StatModifiers type, int amount) {

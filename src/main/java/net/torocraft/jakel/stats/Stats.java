@@ -34,10 +34,10 @@ public class Stats {
   public float lifePerTick = 0f;
 
   @NbtField
-  public float criticalHitDamage = 0f;
+  public float criticalHitDamage = 1.5f;
 
   @NbtField
-  public float criticalHitChance = 0f;
+  public float criticalHitChance = 0.05f;
 
   @NbtField
   public float areaDamage = 0f;

@@ -1,6 +1,5 @@
 package net.torocraft.jakel.loot.stat;
 
-import net.torocraft.jakel.stats.Stats;
 import net.torocraft.jakel.nbt.NbtField;
 
 public class StatModifierData {

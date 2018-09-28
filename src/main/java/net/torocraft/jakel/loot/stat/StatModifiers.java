@@ -28,29 +28,29 @@ public enum StatModifiers implements IStatModifier {
     stats.poison += amount;
   }),
 
-  MOVEMENT_SPEED((stats, amount) -> {
-
-  }),
-
-  JUMP((stats, amount) -> {
-
-  }),
-
-  HP((stats, amount) -> {
-
-  }),
-
-  REGEN((stats, amount) -> {
-
-  }),
+//  MOVEMENT_SPEED((stats, amount) -> {
+//
+//  }),
+//
+//  JUMP((stats, amount) -> {
+//
+//  }),
+//
+//  HP((stats, amount) -> {
+//
+//  }),
+//
+//  REGEN((stats, amount) -> {
+//
+//  }),
 
   DEFENSE((stats, amount) -> {
     stats.defense += amount;
   }),
 
-  INCREASED_XP_GAIN((stats, amount) -> {
-
-  }),
+//  INCREASED_XP_GAIN((stats, amount) -> {
+//
+//  }),
 
   CRITICAL_HIT_CHANCE((stats, amount) -> {
     stats.criticalHitChance += amount;
@@ -60,13 +60,13 @@ public enum StatModifiers implements IStatModifier {
     stats.criticalHitDamage += amount;
   }),
 
-  SOCKET((stats, amount) -> {
-
-  }),
-
-  MANA_COST((stats, amount) -> {
-
-  }),
+//  SOCKET((stats, amount) -> {
+//
+//  }),
+//
+//  MANA_COST((stats, amount) -> {
+//
+//  }),
 
   FIRE_RESIST((stats, amount) -> {
     stats.fireResist += toPercent(amount);
@@ -84,16 +84,16 @@ public enum StatModifiers implements IStatModifier {
     stats.coldResist += toPercent(amount);
   }),
 
-  HOLY_RESIST((stats, amount) -> {
-    stats.holyResist += toPercent(amount);
-  }),
+//  HOLY_RESIST((stats, amount) -> {
+//    stats.holyResist += toPercent(amount);
+//  }),
 
-  CONTROL_IMPAIRMENT((stats, amount) -> {
-  }),
-
-  ATTACK_SPEED((stats, amount) -> {
-
-  }),
+//  CONTROL_IMPAIRMENT((stats, amount) -> {
+//  }),
+//
+//  ATTACK_SPEED((stats, amount) -> {
+//
+//  }),
 
   AREA_DAMAGE((stats, amount) -> {
     stats.areaDamage += amount;
