@@ -1,119 +1,55 @@
 package net.torocraft.jakel.loot.stat;
 
+import net.torocraft.jakel.loot.stat.modifiers.FlatModifier;
+import net.torocraft.jakel.loot.stat.modifiers.MultiplierModifier;
 import net.torocraft.jakel.stats.Stats;
 
 public enum StatModifiers implements IStatModifier {
 
-  DAMAGE((stats, amount) -> {
-    stats.damage += amount;
-  }),
+  manaMaximum(new FlatModifier(("manaMaximum"))),
+  manaPerTick(new FlatModifier("manaPerTick")),
+  cooldownPerTick(new FlatModifier("cooldownPerTick")),
+  lifePerHit(new FlatModifier("lifePerHit")),
+  lifePerKill(new FlatModifier("lifePerKill")),
+  lifePerTick(new FlatModifier("lifePerTick")),
+  criticalHitDamage(new FlatModifier("criticalHitDamage")),
+  criticalHitChance(new FlatModifier("criticalHitChance")),
 
-  FIRE((stats, amount) -> {
-    stats.fire += amount;
-  }),
+  /*
+   * Special Damage (flat)
+   */
+  thorns(new FlatModifier("thorns")),
+  areaDamage(new FlatModifier("areaDamage")),
 
-  WITHER((stats, amount) -> {
-    stats.wither += amount;
-  }),
+  /*
+   * Flat Damage
+   */
+  damage(new FlatModifier("damage")),
+  fire(new FlatModifier("fire")),
+  lightning(new FlatModifier("lightning")),
+  wither(new FlatModifier("wither")),
+  cold(new FlatModifier("cold")),
+  poison(new FlatModifier("poison")),
 
-  LIGHTNING((stats, amount) -> {
-    stats.lightning += amount;
-  }),
+  /*
+   * Damage Multipliers
+   */
+  damageMultiplier(new MultiplierModifier("damage")),
+  fireMultiplier(new MultiplierModifier("fire")),
+  lightningMultiplier(new MultiplierModifier("lightning")),
+  witherMultiplier(new MultiplierModifier("wither")),
+  coldMultiplier(new MultiplierModifier("cold")),
+  poisonMultiplier(new MultiplierModifier("poison")),
 
-  COLD((stats, amount) -> {
-    stats.cold += amount;
-  }),
-
-  POISON((stats, amount) -> {
-    stats.poison += amount;
-  }),
-
-//  MOVEMENT_SPEED((stats, amount) -> {
-//
-//  }),
-//
-//  JUMP((stats, amount) -> {
-//
-//  }),
-//
-//  HP((stats, amount) -> {
-//
-//  }),
-//
-//  REGEN((stats, amount) -> {
-//
-//  }),
-
-  DEFENSE((stats, amount) -> {
-    stats.defense += amount;
-  }),
-
-//  INCREASED_XP_GAIN((stats, amount) -> {
-//
-//  }),
-
-  CRITICAL_HIT_CHANCE((stats, amount) -> {
-    stats.criticalHitChance += amount;
-  }),
-
-  CRITICAL_HIT_DAMAGE((stats, amount) -> {
-    stats.criticalHitDamage += amount;
-  }),
-
-//  SOCKET((stats, amount) -> {
-//
-//  }),
-//
-//  MANA_COST((stats, amount) -> {
-//
-//  }),
-
-  FIRE_RESIST((stats, amount) -> {
-    stats.fireResist += toPercent(amount);
-  }),
-
-  WITHER_RESIST((stats, amount) -> {
-    stats.witherResist += toPercent(amount);
-  }),
-
-  LIGHTNING_RESIST((stats, amount) -> {
-    stats.lightningResist += toPercent(amount);
-  }),
-
-  COLD_RESIST((stats, amount) -> {
-    stats.coldResist += toPercent(amount);
-  }),
-
-//  HOLY_RESIST((stats, amount) -> {
-//    stats.holyResist += toPercent(amount);
-//  }),
-
-//  CONTROL_IMPAIRMENT((stats, amount) -> {
-//  }),
-//
-//  ATTACK_SPEED((stats, amount) -> {
-//
-//  }),
-
-  AREA_DAMAGE((stats, amount) -> {
-    stats.areaDamage += amount;
-  }),
-
-  LIFE_PER_HIT((stats, amount) -> {
-    stats.lifePerHit += amount;
-  }),
-
-  LIFE_PER_KILL((stats, amount) -> {
-    stats.lifePerKill += amount;
-  }),
-
-  THORNS((stats, amount) -> {
-    stats.thorns += amount;
-  });
-
-  private static float toPercent(int amount) {
-    return ((float) amount) / 100;
-  }
+  /*
+   * Resistances (Percent)
+   */
+  defense(new MultiplierModifier("defense")),
+  fireResist(new MultiplierModifier("fireResist")),
+  lightningResist(new MultiplierModifier("lightningResist")),
+  witherResist(new MultiplierModifier("witherResist")),
+  coldResist(new MultiplierModifier("coldResist")),
+  holyResist(new MultiplierModifier("holyResist"));
 
   private final IStatModifier modifier;
 
@@ -121,7 +57,7 @@ public enum StatModifiers implements IStatModifier {
     this.modifier = modifier;
   }
 
-  public void apply(Stats stats, int amount) {
+  public void apply(Stats stats, float amount) {
     modifier.apply(stats, amount);
   }
 

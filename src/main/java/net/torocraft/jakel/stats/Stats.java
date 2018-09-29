@@ -16,15 +16,6 @@ public class Stats {
   public float cooldownPerTick = 0.1f;
 
   @NbtField
-  public float damage = 1f;
-
-  @NbtField
-  public float defense = 1f;
-
-  @NbtField
-  public float thorns = 0f;
-
-  @NbtField
   public float lifePerHit = 0f;
 
   @NbtField
@@ -39,23 +30,45 @@ public class Stats {
   @NbtField
   public float criticalHitChance = 0.05f;
 
+  /*
+   * Special Damage
+   */
+
+  @NbtField
+  public float thorns = 0f;
+
+
   @NbtField
   public float areaDamage = 0f;
 
-  @NbtField
-  public float fire = 1f;
+  /*
+   * Damage
+   */
 
   @NbtField
-  public float lightning = 1f;
+  public float damage = 0f;
 
   @NbtField
-  public float wither = 1f;
+  public float fire = 0f;
 
   @NbtField
-  public float cold = 1f;
+  public float lightning = 0f;
 
   @NbtField
-  public float poison = 1f;
+  public float wither = 0f;
+
+  @NbtField
+  public float cold = 0f;
+
+  @NbtField
+  public float poison = 0f;
+
+  /*
+   * Resistance Multiplier
+   */
+
+  @NbtField
+  public float defense = 1f;
 
   @NbtField
   public float fireResist = 0f;

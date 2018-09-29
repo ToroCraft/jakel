@@ -1,0 +1,95 @@
+{
+  "FEET": [
+    "defense",
+    "fireResist",
+    "lightningResist",
+    "witherResist",
+    "coldResist",
+    "holyResist"
+  ],
+  "LEGS": [
+    "lifePerHit",
+    "lifePerKill",
+    "lifePerTick",
+    "defense",
+    "fireResist",
+    "lightningResist",
+    "witherResist",
+    "coldResist",
+    "holyResist"
+  ],
+  "CHEST": [
+    "lifePerHit",
+    "lifePerKill",
+    "lifePerTick",
+    "criticalHitDamage",
+    "criticalHitChance",
+    "thorns",
+    "areaDamage",
+    "defense",
+    "fireResist",
+    "lightningResist",
+    "witherResist",
+    "coldResist",
+    "holyResist"
+  ],
+  "HEAD": [
+    "manaMaximum",
+    "manaPerTick",
+    "cooldownPerTick",
+    "criticalHitDamage",
+    "criticalHitChance",
+    "thorns",
+    "areaDamage",
+    "defense",
+    "fireResist",
+    "lightningResist",
+    "witherResist",
+    "coldResist",
+    "holyResist"
+  ],
+  "WEAPON": [
+    "manaMaximum",
+    "manaPerTick",
+    "cooldownPerTick",
+    "lifePerHit",
+    "lifePerKill",
+    "lifePerTick",
+    "criticalHitDamage",
+    "criticalHitChance",
+    "areaDamage",
+    "damage",
+    "fire",
+    "lightning",
+    "wither",
+    "cold",
+    "poison",
+    "damageMultiplier",
+    "fireMultiplier",
+    "lightningMultiplier",
+    "witherMultiplier",
+    "coldMultiplier",
+    "poisonMultiplier"
+  ],
+  "SHIELD": [
+    "manaMaximum",
+    "manaPerTick",
+    "cooldownPerTick",
+    "thorns",
+    "damageMultiplier",
+    "fireMultiplier",
+    "lightningMultiplier",
+    "witherMultiplier",
+    "coldMultiplier",
+    "poisonMultiplier",
+    "defense",
+    "fireResist",
+    "lightningResist",
+    "witherResist",
+    "coldResist",
+    "holyResist"
+  ]
+}
+
+
+

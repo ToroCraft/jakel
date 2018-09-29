@@ -23,17 +23,10 @@ public class EnchantApi {
   public static void enchant(ItemStack item) {
     ItemData data = CapabilityItemData.get(item);
     data.modifiers = new ArrayList<>();
-    data.modifiers.add(create(StatModifiers.DAMAGE, 5));
-    data.modifiers.add(create(StatModifiers.FIRE_RESIST, 10));
+    data.modifiers.add(create(StatModifiers.damage, 5));
+    data.modifiers.add(create(StatModifiers.fireResist, 10));
     data.tick = TickHandlers.DAMAGE_BOOST_FROM_NEARBY_MOBS;
     data.isMagicalConduit = true;
-  }
-
-  private static StatModifierData randomModifier(int level) {
-    StatModifierData data = new StatModifierData();
-    data.amount = amount;
-    data.type = StatModifiers.values()[rand.nextInt(StatModifiers.values().length)];
-    return data;
   }
 
   private static StatModifierData create(StatModifiers type, int amount) {

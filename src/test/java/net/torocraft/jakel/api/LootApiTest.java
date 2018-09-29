@@ -16,9 +16,9 @@ public class LootApiTest {
     Stats stats = new Stats();
     stats.damage = 0;
     item.modifiers = new ArrayList<>();
-    item.modifiers.add(create(StatModifiers.DAMAGE, 10));
-    item.modifiers.add(create(StatModifiers.DAMAGE, 2));
-    item.modifiers.add(create(StatModifiers.FIRE_RESIST, 10));
+    item.modifiers.add(create(StatModifiers.damage, 10));
+    item.modifiers.add(create(StatModifiers.damage, 2));
+    item.modifiers.add(create(StatModifiers.fireResist, 10));
     LootApi.applyItem(item, stats);
     Assert.assertEquals(12f, stats.damage, 0.00001);
     Assert.assertEquals(0.1f, stats.fireResist, 0.000001);

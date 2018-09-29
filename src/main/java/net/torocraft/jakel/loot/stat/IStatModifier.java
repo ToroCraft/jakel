@@ -5,5 +5,5 @@ import net.torocraft.jakel.stats.Stats;
 @FunctionalInterface
 public interface IStatModifier {
 
-  void apply(Stats stats, int amount);
+  void apply(Stats stats, float amount);
 }
