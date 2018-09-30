@@ -61,4 +61,7 @@ public enum StatModifiers implements IStatModifier {
     modifier.apply(stats, amount);
   }
 
+  public IStatModifier getModifier() {
+    return modifier;
+  }
 }

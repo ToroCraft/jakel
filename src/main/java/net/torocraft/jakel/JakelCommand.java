@@ -2,6 +2,7 @@ package net.torocraft.jakel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -17,6 +18,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.common.asm.transformers.ItemStackTransformer;
 import net.torocraft.jakel.api.EnchantApi;
 import net.torocraft.jakel.capabilites.CapabilitySpell;
 import net.torocraft.jakel.items.ItemSpell;
@@ -95,9 +97,13 @@ public class JakelCommand extends CommandBase {
 
     EntityPlayer player = (EntityPlayer) sender;
 
-    ItemStack firstItem = getHotBarItems(player).get(0);
+    ItemStack stack = new ItemStack(net.minecraft.init.Items.WOODEN_SWORD);
 
-    EnchantApi.enchant(firstItem);
+    EnchantApi.enchant(stack, 26);
+
+    List<ItemStack> l = new ArrayList<>();
+    l.add(stack);
+    dropItems(player, l);
 
     logHotBarItems(player);
   }

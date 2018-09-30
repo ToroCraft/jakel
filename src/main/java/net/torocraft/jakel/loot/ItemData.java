@@ -13,17 +13,19 @@ import net.torocraft.jakel.nbt.NbtField;
 public class ItemData implements IHitHandler, ITickHandler {
 
   @NbtField
-  public Boolean isMagicalConduit;
+  public int level;
 
   @NbtField
-  public Integer coolDown;
+  public boolean isMagicalConduit;
+
+  @NbtField
+  public int coolDown;
 
   @NbtField
   public TickHandlers tick;
 
   @NbtField
   public List<Integer> tickParameters;
-
 
   @NbtField
   public HitHandlers hit;

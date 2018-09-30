@@ -3,43 +3,36 @@ package net.torocraft.jakel;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.client.event.RenderTooltipEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.torocraft.jakel.capabilites.CapabilityItemData;
+import net.torocraft.jakel.loot.ItemData;
+import net.torocraft.jakel.loot.stat.StatModifierData;
 
-//@Mod.EventBusSubscriber(value = { Side.CLIENT }, modid = Jakel.MODID)
+@Mod.EventBusSubscriber(value = { Side.CLIENT }, modid = Jakel.MODID)
 public class ClientEventHandlers {
 
   @SubscribeEvent
-  public static void scaleEntity(RenderLivingEvent.Pre event) {
-    float scale = 2f;
-    if (modelShouldBeScaled(event)) {
-      GlStateManager.pushAttrib();
-      GlStateManager.pushMatrix();
-      GlStateManager.translate(5, 0, 5);
-      GlStateManager.scale(scale, scale, scale);
-    }
+  public static void scaleEntity(ItemTooltipEvent event) {
+   ItemData data = CapabilityItemData.get(event.getItemStack());
+   if (data == null) {
+     return;
+   }
+
+
+   if (data.modifiers != null) {
+     data.modifiers.forEach(m -> renderModifierTooltip(event, m));
+   }
+
   }
 
-  @SubscribeEvent
-  public static void scaleEntity(RenderLivingEvent.Post event) {
-    if (modelShouldBeScaled(event)) {
-      GlStateManager.popMatrix();
-      GlStateManager.popAttrib();
-    }
-  }
+  private static void renderModifierTooltip(ItemTooltipEvent event, StatModifierData m) {
+    // TODO translate
 
-  private static boolean modelShouldBeScaled(RenderLivingEvent event) {
-
-    if (true) {
-      return false;
-    }
-
-    if (!event.getEntity().getTags().contains(Jakel.TAG_HAS_TRAIT)) {
-      return false;
-    }
-    if (!(event.getRenderer().getMainModel() instanceof ModelBiped)) {
-      return false;
-    }
-    return true;
+    event.getToolTip().add(m.toString());
   }
 
 }

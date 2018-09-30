@@ -48,7 +48,7 @@
     "coldResist",
     "holyResist"
   ],
-  "WEAPON": [
+  "MAINHAND": [
     "manaMaximum",
     "manaPerTick",
     "cooldownPerTick",
@@ -71,7 +71,7 @@
     "coldMultiplier",
     "poisonMultiplier"
   ],
-  "SHIELD": [
+  "OFFHAND": [
     "manaMaximum",
     "manaPerTick",
     "cooldownPerTick",
