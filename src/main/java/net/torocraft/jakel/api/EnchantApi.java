@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.torocraft.jakel.capabilites.CapabilityItemData;
@@ -15,6 +16,7 @@ import net.torocraft.jakel.loot.stat.StatModifierData;
 import net.torocraft.jakel.loot.stat.StatModifiers;
 import net.torocraft.jakel.loot.stat.modifiers.MultiplierModifier;
 import net.torocraft.jakel.loot.tick.TickHandlers;
+import scala.reflect.internal.Trees.Modifiers;
 
 public class EnchantApi {
   public static int LEVEL_CAP = 64;
@@ -23,17 +25,64 @@ public class EnchantApi {
 
   public static void enchant(ItemStack item, int level) {
     ItemData data = CapabilityItemData.get(item);
+
+    if (data == null) {
+      return;
+    }
+
     EntityEquipmentSlot equipType = EntityLiving.getSlotForItemStack(item);
 
+
+
+    // apply base damage
+
+    // apply base defense
+
+    // apply elemental damages
     data.modifiers = new ArrayList<>();
+
+    int amount = damageRange(level).roll();
+
+    switch(equipType) {
+      case MAINHAND:
+        data.modifiers.add(create(StatModifiers.damage, amount));
+        // TODO add chance of extra element damage
+        break;
+      case OFFHAND:
+        data.modifiers.add(create(StatModifiers.defense, amount / 4d));
+        break;
+      case FEET:
+        data.modifiers.add(create(StatModifiers.defense, amount / 8d));
+        break;
+      case LEGS:
+        data.modifiers.add(create(StatModifiers.defense, amount / 4d));
+        break;
+      case CHEST:
+        data.modifiers.add(create(StatModifiers.defense, amount / 2d));
+        break;
+      case HEAD:
+        data.modifiers.add(create(StatModifiers.defense, amount / 8d));
+        break;
+    }
+
+
     for (int i = 0; i < 4; i++) {
       data.modifiers.add(randomModifier(equipType, level));
     }
-    data.tick = TickHandlers.DAMAGE_BOOST_FROM_NEARBY_MOBS;
+
+    // TODO build extras
+    // data.tick = TickHandlers.DAMAGE_BOOST_FROM_NEARBY_MOBS;
 
     if (equipType.equals(EntityEquipmentSlot.MAINHAND)) {
       data.isMagicalConduit = true;
     }
+  }
+
+  private static StatModifierData create(StatModifiers type, double amount) {
+    StatModifierData data = new StatModifierData();
+    data.type = type;
+    data.amount = amount;
+    return data;
   }
 
   private static StatModifierData randomModifier(EntityEquipmentSlot equipType, int level) {
@@ -46,7 +95,6 @@ public class EnchantApi {
       // TODO this should only be used for damage
       data.amount = damageRange(level).roll();
     }
-
     return data;
   }
 

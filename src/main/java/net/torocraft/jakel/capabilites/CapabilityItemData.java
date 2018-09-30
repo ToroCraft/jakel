@@ -58,6 +58,7 @@ public class CapabilityItemData implements INBTSerializable<NBTTagCompound> {
   }
 
   public static boolean isMagicCapableItem(Item item) {
+    // TODO add whitelist config
     if (item instanceof ItemSword) {
       return true;
     }

@@ -2,7 +2,6 @@ package net.torocraft.jakel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -15,13 +14,12 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.asm.transformers.ItemStackTransformer;
 import net.torocraft.jakel.api.EnchantApi;
 import net.torocraft.jakel.capabilites.CapabilitySpell;
-import net.torocraft.jakel.items.ItemSpell;
 import net.torocraft.jakel.items.Items;
 import net.torocraft.jakel.spells.SpellData;
 import net.torocraft.jakel.traits.Type;
@@ -73,7 +71,7 @@ public class JakelCommand extends CommandBase {
     }
     EntityPlayer player = (EntityPlayer) sender;
     List<ItemStack> spells = new ArrayList<>();
-    for(Items itemCode: Items.values()) {
+    for (Items itemCode : Items.values()) {
 
       ItemStack spell = new ItemStack(itemCode.getInstance());
       SpellData data = CapabilitySpell.get(spell);
@@ -90,21 +88,27 @@ public class JakelCommand extends CommandBase {
     }
   }
 
+  private static final Item[] ENCHANT_ITEMS = {
+      net.minecraft.init.Items.DIAMOND_SWORD,
+      net.minecraft.init.Items.DIAMOND_BOOTS,
+      net.minecraft.init.Items.DIAMOND_HELMET,
+      net.minecraft.init.Items.DIAMOND_LEGGINGS,
+      net.minecraft.init.Items.DIAMOND_CHESTPLATE,
+      net.minecraft.init.Items.SHIELD
+  };
+
   private void enchant(ICommandSender sender, @Nonnull String[] args) throws CommandException {
     if (!(sender instanceof EntityPlayer)) {
       return;
     }
-
     EntityPlayer player = (EntityPlayer) sender;
-
-    ItemStack stack = new ItemStack(net.minecraft.init.Items.WOODEN_SWORD);
-
-    EnchantApi.enchant(stack, 26);
-
     List<ItemStack> l = new ArrayList<>();
-    l.add(stack);
+    for (int i = 0; i < ENCHANT_ITEMS.length; i++) {
+      ItemStack stack = new ItemStack(ENCHANT_ITEMS[i]);
+      EnchantApi.enchant(stack, 26);
+      l.add(stack);
+    }
     dropItems(player, l);
-
     logHotBarItems(player);
   }
 

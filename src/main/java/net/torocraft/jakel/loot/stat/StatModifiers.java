@@ -44,7 +44,7 @@ public enum StatModifiers implements IStatModifier {
   /*
    * Resistances (Percent)
    */
-  defense(new MultiplierModifier("defense")),
+  defense(new FlatModifier("defense")),
   fireResist(new MultiplierModifier("fireResist")),
   lightningResist(new MultiplierModifier("lightningResist")),
   witherResist(new MultiplierModifier("witherResist")),

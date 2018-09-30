@@ -31,6 +31,8 @@ public class AttackApi {
   public static boolean attackWithMagic(EntityLivingBase attacker, float damageMultiplier, Element element, Entity missile, Entity target) {
     DamageSource source = getMagicalDamageSource(attacker, missile);
 
+    System.out.println("damageMultiplier: " + damageMultiplier);
+
     float damage = 1;
     if (attacker instanceof EntityPlayer) {
       damage = applyDamageModifiers((EntityPlayer) attacker, damageMultiplier, element);
@@ -46,19 +48,19 @@ public class AttackApi {
 
     switch (element) {
       case FIRE:
-        damage *= stats.fire;
+        damage *= 1 + stats.fire;
         break;
       case LIGHTNING:
-        damage *= stats.lightning;
+        damage *= 1 + stats.lightning;
         break;
       case WITHER:
-        damage *= stats.wither;
+        damage *= 1 + stats.wither;
         break;
       case COLD:
-        damage *= stats.cold;
+        damage *= 1 + stats.cold;
         break;
       case POISON:
-        damage *= stats.poison;
+        damage *= 1 + stats.poison;
         break;
     }
 
