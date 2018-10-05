@@ -34,12 +34,12 @@ public enum StatModifiers implements IStatModifier {
   /*
    * Damage Multipliers
    */
-  damageMultiplier(new MultiplierModifier("damage")),
-  fireMultiplier(new MultiplierModifier("fire")),
-  lightningMultiplier(new MultiplierModifier("lightning")),
-  witherMultiplier(new MultiplierModifier("wither")),
-  coldMultiplier(new MultiplierModifier("cold")),
-  poisonMultiplier(new MultiplierModifier("poison")),
+  damageMultiplier(new MultiplierModifier("damageMultiplier")),
+  fireMultiplier(new MultiplierModifier("fireMultiplier")),
+  lightningMultiplier(new MultiplierModifier("lightningMultiplier")),
+  witherMultiplier(new MultiplierModifier("witherMultiplier")),
+  coldMultiplier(new MultiplierModifier("coldMultiplier")),
+  poisonMultiplier(new MultiplierModifier("poisonMultiplier")),
 
   /*
    * Resistances (Percent)

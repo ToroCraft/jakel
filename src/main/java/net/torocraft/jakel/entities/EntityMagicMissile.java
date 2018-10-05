@@ -10,6 +10,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -24,6 +25,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.torocraft.jakel.api.AttackApi;
 import net.torocraft.jakel.loot.Element;
 import net.torocraft.jakel.loot.IElemental;
+import net.torocraft.jakel.util.MagicDamageSource;
 
 public class EntityMagicMissile extends Entity implements IElemental {
 
@@ -256,7 +258,9 @@ public class EntityMagicMissile extends Entity implements IElemental {
   }
 
   protected void handleEntityImpact(Entity entity) {
-    boolean attacked = AttackApi.attackWithMagic(shootingEntity, getDamageMultiplier(), elemental, this, entity);
+    DamageSource source = new MagicDamageSource(elemental, this, shootingEntity);
+
+    boolean attacked = AttackApi.attackWithMagic(shootingEntity, getDamageMultiplier(), elemental, source, entity);
     if (attacked) {
       handleEntityWasDamaged(entity);
     }

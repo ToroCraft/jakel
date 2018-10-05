@@ -8,78 +8,68 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.torocraft.jakel.api.LootApi.SpellSlot;
 import net.torocraft.jakel.capabilites.CapabilityPlayerData;
 import net.torocraft.jakel.entities.EntityMagicMissile;
 import net.torocraft.jakel.items.ISpellCaster;
-import net.torocraft.jakel.items.ItemSpell;
 import net.torocraft.jakel.loot.Element;
-import net.torocraft.jakel.loot.IElemental;
 import net.torocraft.jakel.spells.SpellData;
 import net.torocraft.jakel.spells.SpellTarget;
 import net.torocraft.jakel.spells.SpellTarget.Type;
 import net.torocraft.jakel.stats.PlayerData;
 import net.torocraft.jakel.stats.Stats;
+import net.torocraft.jakel.util.MagicDamageSource;
 
 public class AttackApi {
 
   private static final Random rand = new Random();
 
-  public static boolean attackWithMagic(EntityLivingBase attacker, float damageMultiplier, Element element, Entity missile, Entity target) {
-    DamageSource source = getMagicalDamageSource(attacker, missile);
-
-    System.out.println("damageMultiplier: " + damageMultiplier);
-
-    float damage = 1;
-    if (attacker instanceof EntityPlayer) {
-      damage = applyDamageModifiers((EntityPlayer) attacker, damageMultiplier, element);
+  public static boolean attackWithMagic(EntityLivingBase attacker, float damageMultiplier, Element element, MagicDamageSource source, Entity target) {
+    if (!(attacker instanceof EntityPlayer)) {
+      // TODO add cap to entities to allow them to attack with magic
+      return false;
     }
 
-    return target.attackEntityFrom(source, damage);
+    EntityPlayer player = (EntityPlayer) attacker;
+    Stats stats = CapabilityPlayerData.get(player).stats;
+
+    float damage = calculateDamage(stats, damageMultiplier, Element.PHYSICAL);
+    float elementalDamage = calculateDamage(stats, damageMultiplier, element);
+
+    // TODO build sources here
+    return target.attackEntityFrom(source, damage) || target.attackEntityFrom(source, elementalDamage);
   }
 
-  private static float applyDamageModifiers(EntityPlayer attacker, float damageMultiplier, Element element) {
-    Stats stats = CapabilityPlayerData.get(attacker).stats;
-
-    float damage = stats.damage * damageMultiplier;
-
+  private static float calculateDamage(Stats stats, float spellDamageMultiplier, Element element) {
+    float damage = 1f;
     switch (element) {
       case FIRE:
-        damage *= 1 + stats.fire;
+        damage += stats.fire * spellDamageMultiplier;
+        damage *= 1 + stats.fireMultiplier;
         break;
       case LIGHTNING:
-        damage *= 1 + stats.lightning;
+        damage += stats.lightning * spellDamageMultiplier;
+        damage *= 1 + stats.lightningMultiplier;
         break;
       case WITHER:
-        damage *= 1 + stats.wither;
+        damage += stats.wither * spellDamageMultiplier;
+        damage *= 1 + stats.witherMultiplier;
         break;
       case COLD:
-        damage *= 1 + stats.cold;
+        damage += stats.cold * spellDamageMultiplier;
+        damage *= 1 + stats.coldMultiplier;
         break;
       case POISON:
-        damage *= 1 + stats.poison;
+        damage += stats.poison * spellDamageMultiplier;
+        damage *= 1 +  stats.poisonMultiplier;
         break;
+      default:
+        damage += stats.damage * spellDamageMultiplier;
     }
-
-    System.out.println("attacking with STATS: " + stats);
-
-    System.out.println("attacking with base damage modifier: " + damageMultiplier + " " + element);
-
-    System.out.println("FINAL DAMAGE: " + damage);
-
+    System.out.println(element + " elemental damage: " + damage);
     return damage;
-  }
-
-  private static DamageSource getMagicalDamageSource(EntityLivingBase attacker, Entity missile) {
-    Element element = Element.PHYSICAL;
-    if (missile instanceof IElemental) {
-      element = ((IElemental) missile).getElemental();
-    }
-    String type = element.toString().toLowerCase() + "_magic";
-    return new EntityDamageSourceIndirect(type, missile, attacker);
   }
 
   public static Vec3d inFrontOf(EntityLivingBase entity, double distance) {

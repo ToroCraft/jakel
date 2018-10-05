@@ -1,6 +1,7 @@
 package net.torocraft.jakel.stats;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.torocraft.jakel.loot.stat.modifiers.MultiplierModifier;
 import net.torocraft.jakel.nbt.NbtField;
 import net.torocraft.jakel.nbt.NbtSerializer;
 
@@ -64,6 +65,28 @@ public class Stats {
   public float poison = 0f;
 
   /*
+   * Damage Multipliers
+   */
+
+  @NbtField
+  public float damageMultiplier = 1f;
+
+  @NbtField
+  public float fireMultiplier = 1f;
+
+  @NbtField
+  public float lightningMultiplier = 1f;
+
+  @NbtField
+  public float witherMultiplier = 1f;
+
+  @NbtField
+  public float coldMultiplier = 1f;
+
+  @NbtField
+  public float poisonMultiplier = 1f;
+
+  /*
    * Resistance Multiplier
    */
 
@@ -71,19 +94,19 @@ public class Stats {
   public float defense = 1f;
 
   @NbtField
-  public float fireResist = 0f;
+  public float fireResist = 1f;
 
   @NbtField
-  public float lightningResist = 0f;
+  public float lightningResist = 1f;
 
   @NbtField
-  public float witherResist = 0f;
+  public float witherResist = 1f;
 
   @NbtField
-  public float coldResist = 0f;
+  public float coldResist = 1f;
 
   @NbtField
-  public float holyResist = 0f;
+  public float holyResist = 1f;
 
   @Override
   public String toString() {
