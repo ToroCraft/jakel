@@ -14,6 +14,7 @@ import net.torocraft.jakel.spells.SpellData;
 public class GuiHandler implements IGuiHandler {
 
   public static final int SPELL_GUI = 0;
+  public static final int STATS_GUI = 1;
 
   public static void init() {
     NetworkRegistry.INSTANCE.registerGuiHandler(Jakel.INSTANCE, new GuiHandler());
@@ -27,6 +28,8 @@ public class GuiHandler implements IGuiHandler {
         return null;
       }
       return new ContainerSpell(player, spell, world);
+    } else if (ID == STATS_GUI) {
+      return new ContainerStats(player, world);
     }
     return null;
   }
@@ -39,6 +42,8 @@ public class GuiHandler implements IGuiHandler {
         return null;
       }
       return new GuiContainerSpell(player, spell, world);
+    } else if (ID == STATS_GUI) {
+      return new GuiContainerStats(player, world);
     }
     return null;
   }

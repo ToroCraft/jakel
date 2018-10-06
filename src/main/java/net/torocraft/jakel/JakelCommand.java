@@ -20,6 +20,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.torocraft.jakel.api.EnchantApi;
 import net.torocraft.jakel.capabilites.CapabilitySpell;
+import net.torocraft.jakel.gui.GuiHandler;
 import net.torocraft.jakel.items.Items;
 import net.torocraft.jakel.spells.SpellData;
 import net.torocraft.jakel.traits.Type;
@@ -59,6 +60,9 @@ public class JakelCommand extends CommandBase {
         return;
       case "dropSpellBooks":
         dropSpellBooks(sender, args);
+        return;
+      case "stats":
+        stats(sender, args);
         return;
       default:
         throw new WrongUsageException("commands.jakel.usage");
@@ -113,6 +117,15 @@ public class JakelCommand extends CommandBase {
     logHotBarItems(player);
   }
 
+  private void stats(ICommandSender sender, @Nonnull String[] args) {
+    if (!(sender instanceof EntityPlayer)) {
+      return;
+    }
+    System.out.println("open gui");
+    EntityPlayer player = (EntityPlayer) sender;
+    player.openGui(Jakel.INSTANCE, GuiHandler.STATS_GUI, player.world, 0, 0, 0);
+  }
+
   private void logHotBarItems(EntityPlayer player) {
     InventoryPlayer inv = player.inventory;
     for (int i = 0; i < inv.getSizeInventory(); i++) {
@@ -137,7 +150,7 @@ public class JakelCommand extends CommandBase {
   public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender,
       String[] args, @Nullable BlockPos targetPos) {
     if (args.length == 1) {
-      return getListOfStringsMatchingLastWord(args, "enchant", "dropSpellBooks");
+      return getListOfStringsMatchingLastWord(args, "enchant", "dropSpellBooks", "stats");
     }
     String command = args[0];
     switch (command) {
