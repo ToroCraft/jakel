@@ -106,7 +106,7 @@ public class JakelCommand extends CommandBase {
     int level = 1;
     for (int i = 0; i < ENCHANT_ITEMS.length; i++) {
       ItemStack stack = new ItemStack(ENCHANT_ITEMS[i]);
-      EnchantApi.enchant(stack, 1);
+      EnchantApi.enchant(stack, 1, 2);
       l.add(stack);
     }
     dropItems(player, l);
@@ -127,14 +127,10 @@ public class JakelCommand extends CommandBase {
     InventoryPlayer inv = player.inventory;
     List<ItemStack> items = new ArrayList<>();
     for (int i = 0; i < inv.getSizeInventory(); i++) {
-
       items.add(inv.getStackInSlot(i));
-
-
     }
     return items;
   }
-
 
   @Override
   @Nonnull

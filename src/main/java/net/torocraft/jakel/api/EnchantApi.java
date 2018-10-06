@@ -23,7 +23,7 @@ public class EnchantApi {
 
   private static Random rand = new Random();
 
-  public static void enchant(ItemStack item, int level) {
+  public static void enchant(ItemStack item, int level, int randomProperties) {
     ItemData data = CapabilityItemData.get(item);
 
     if (data == null) {
@@ -32,13 +32,6 @@ public class EnchantApi {
 
     EntityEquipmentSlot equipType = EntityLiving.getSlotForItemStack(item);
 
-
-
-    // apply base damage
-
-    // apply base defense
-
-    // apply elemental damages
     data.modifiers = new ArrayList<>();
 
     int amount = damageRange(level).roll();
@@ -46,7 +39,6 @@ public class EnchantApi {
     switch(equipType) {
       case MAINHAND:
         data.modifiers.add(create(StatModifiers.damage, amount));
-        // TODO add chance of extra element damage
         break;
       case OFFHAND:
         data.modifiers.add(create(StatModifiers.defense, amount / 4d));
@@ -65,8 +57,7 @@ public class EnchantApi {
         break;
     }
 
-
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < randomProperties; i++) {
       data.modifiers.add(randomModifier(equipType, level));
     }
 
@@ -87,8 +78,11 @@ public class EnchantApi {
 
   private static StatModifierData randomModifier(EntityEquipmentSlot equipType, int level) {
     StatModifierData data = new StatModifierData();
+
     List<StatModifiers> modifierTypes = StatModifierByEquip.INSTANCE.get(equipType);
+
     data.type = modifierTypes.get(rand.nextInt(modifierTypes.size()));
+
     if (data.type.getModifier() instanceof MultiplierModifier) {
       data.amount = 1 + (multiplierRange(level).roll() / 100d);
     } else {
