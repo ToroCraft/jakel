@@ -90,7 +90,7 @@ public class EnchantApi {
     List<StatModifiers> modifierTypes = StatModifierByEquip.INSTANCE.get(equipType);
     data.type = modifierTypes.get(rand.nextInt(modifierTypes.size()));
     if (data.type.getModifier() instanceof MultiplierModifier) {
-      data.amount = multiplierRange(level).roll() / 100d;
+      data.amount = 1 + (multiplierRange(level).roll() / 100d);
     } else {
       // TODO this should only be used for damage
       data.amount = damageRange(level).roll();

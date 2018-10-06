@@ -1,6 +1,7 @@
 package net.torocraft.jakel.api;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
@@ -26,7 +27,7 @@ public class AttackApi {
 
   private static final Random rand = new Random();
 
-  public static boolean attackWithMagic(EntityLivingBase attacker, float damageMultiplier, Element element, MagicDamageSource source, Entity target) {
+  public static boolean attackWithMagic(EntityLivingBase attacker, float damageMultiplier, Element element, Entity target, @Nullable Entity missile) {
     if (!(attacker instanceof EntityPlayer)) {
       // TODO add cap to entities to allow them to attack with magic
       return false;
@@ -35,41 +36,33 @@ public class AttackApi {
     EntityPlayer player = (EntityPlayer) attacker;
     Stats stats = CapabilityPlayerData.get(player).stats;
 
-    float damage = calculateDamage(stats, damageMultiplier, Element.PHYSICAL);
-    float elementalDamage = calculateDamage(stats, damageMultiplier, element);
+    float baseDamage = stats.damage * damageMultiplier;
+    float damage = applyElementalDamageBuff(stats, baseDamage, element);
 
-    // TODO build sources here
-    return target.attackEntityFrom(source, damage) || target.attackEntityFrom(source, elementalDamage);
+    if (damage <= 0) {
+      return false;
+    }
+
+    DamageSource source = new MagicDamageSource(element, missile, attacker);
+    System.out.println(element + " damage " + damage + " to " + target.getName());
+    return target.attackEntityFrom(source, damage);
   }
 
-  private static float calculateDamage(Stats stats, float spellDamageMultiplier, Element element) {
+  private static float applyElementalDamageBuff(Stats stats, float baseDamage, Element element) {
     float damage = 1f;
     switch (element) {
       case FIRE:
-        damage += stats.fire * spellDamageMultiplier;
-        damage *= 1 + stats.fireMultiplier;
-        break;
+        return (baseDamage + stats.fire) * stats.fireMultiplier;
       case LIGHTNING:
-        damage += stats.lightning * spellDamageMultiplier;
-        damage *= 1 + stats.lightningMultiplier;
-        break;
+        return (baseDamage + stats.lightning) * stats.lightningMultiplier;
       case WITHER:
-        damage += stats.wither * spellDamageMultiplier;
-        damage *= 1 + stats.witherMultiplier;
-        break;
+        return (baseDamage + stats.wither) * stats.witherMultiplier;
       case COLD:
-        damage += stats.cold * spellDamageMultiplier;
-        damage *= 1 + stats.coldMultiplier;
-        break;
+        return (baseDamage + stats.cold) * stats.coldMultiplier;
       case POISON:
-        damage += stats.poison * spellDamageMultiplier;
-        damage *= 1 +  stats.poisonMultiplier;
-        break;
-      default:
-        damage += stats.damage * spellDamageMultiplier;
+        return (baseDamage + stats.poison) * stats.poisonMultiplier;
     }
-    System.out.println(element + " elemental damage: " + damage);
-    return damage;
+    return baseDamage;
   }
 
   public static Vec3d inFrontOf(EntityLivingBase entity, double distance) {

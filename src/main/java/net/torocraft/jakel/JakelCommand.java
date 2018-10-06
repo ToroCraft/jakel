@@ -103,9 +103,10 @@ public class JakelCommand extends CommandBase {
     }
     EntityPlayer player = (EntityPlayer) sender;
     List<ItemStack> l = new ArrayList<>();
+    int level = 1;
     for (int i = 0; i < ENCHANT_ITEMS.length; i++) {
       ItemStack stack = new ItemStack(ENCHANT_ITEMS[i]);
-      EnchantApi.enchant(stack, 26);
+      EnchantApi.enchant(stack, 1);
       l.add(stack);
     }
     dropItems(player, l);
