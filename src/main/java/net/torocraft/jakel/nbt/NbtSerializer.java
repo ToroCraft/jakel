@@ -30,7 +30,11 @@ public class NbtSerializer {
    * read data from the NBT to the object
    */
   public static void read(NBTTagCompound c, Object o) {
-    fields(o).forEach((Field f) -> readField(c, o, f));
+    try {
+      fields(o).forEach((Field f) -> readField(c, o, f));
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   /**
@@ -39,13 +43,20 @@ public class NbtSerializer {
    * variant of read(NBTTagCompound c, Object o) where the object is created by the read() method
    */
   public static <T> T read(NBTTagCompound c, Class<T> clazz) {
+    T o;
     try {
-      T o = clazz.newInstance();
-      fields(o).forEach((Field f) -> readField(c, o, f));
-      return o;
+      o = clazz.newInstance();
     } catch (Exception e) {
-      throw new IllegalArgumentException(e);
+      throw new RuntimeException(e);
     }
+
+    try {
+      fields(o).forEach((Field f) -> readField(c, o, f));
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return o;
   }
 
   /**

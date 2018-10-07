@@ -69,9 +69,6 @@ public class Stats {
    */
 
   @NbtField
-  public float damageMultiplier = 1f;
-
-  @NbtField
   public float fireMultiplier = 1f;
 
   @NbtField
@@ -104,9 +101,6 @@ public class Stats {
 
   @NbtField
   public float coldResist = 1f;
-
-  @NbtField
-  public float holyResist = 1f;
 
   @Override
   public String toString() {

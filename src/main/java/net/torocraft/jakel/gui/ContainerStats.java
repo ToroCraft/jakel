@@ -1,40 +1,40 @@
 package net.torocraft.jakel.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.torocraft.jakel.Jakel;
-import net.torocraft.jakel.network.MessageSyncSpell;
 
 public class ContainerStats extends Container {
 
   public ContainerStats(EntityPlayer player, World world) {
-    placeSlots(player);
+    placeHotbarSlots(player);
+    placeArmorSlots(player);
   }
 
-  private void placeSlots(EntityPlayer player) {
-    int X_POS = 3;
-    int Y_POS = 84;
+  private void placeHotbarSlots(EntityPlayer player) {
+    int X_POS = 8;
+    int Y_POS = 142;
     int SLOT_SPACING = 18;
 
     for (int slotIndex = 0; slotIndex < 9; slotIndex++) {
       int x = X_POS + SLOT_SPACING * slotIndex;
-      int y = Y_POS + (3 * SLOT_SPACING) + 4;
+      int y = Y_POS;
       addSlotToContainer(new Slot(player.inventory, slotIndex, x, y));
     }
+  }
 
-    for (int row = 0; row < 3; row++) {
-      for (int column = 0; column < 9; column++) {
-        int slotNumber = 9 + column + (row * 9);
-        int x = X_POS + column * SLOT_SPACING;
-        int y = Y_POS + row * SLOT_SPACING;
-        addSlotToContainer(new Slot(player.inventory, slotNumber, x, y));
-      }
+  private void placeArmorSlots(EntityPlayer player) {
+    int X_POS = 8;
+    int Y_POS = 8;
+    int SLOT_SPACING = 18;
+
+    for (int i = 0; i < 4; i++) {
+      int y = Y_POS + (SLOT_SPACING * i);
+      addSlotToContainer(new Slot(player.inventory, 39 - i, X_POS, y));
     }
+    addSlotToContainer(new Slot(player.inventory, 40, X_POS, 87));
   }
 
   @Override

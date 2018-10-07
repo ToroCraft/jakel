@@ -34,7 +34,6 @@ public enum StatModifiers implements IStatModifier {
   /*
    * Damage Multipliers
    */
-  damageMultiplier(new MultiplierModifier("damageMultiplier")),
   fireMultiplier(new MultiplierModifier("fireMultiplier")),
   lightningMultiplier(new MultiplierModifier("lightningMultiplier")),
   witherMultiplier(new MultiplierModifier("witherMultiplier")),
@@ -48,8 +47,7 @@ public enum StatModifiers implements IStatModifier {
   fireResist(new MultiplierModifier("fireResist")),
   lightningResist(new MultiplierModifier("lightningResist")),
   witherResist(new MultiplierModifier("witherResist")),
-  coldResist(new MultiplierModifier("coldResist")),
-  holyResist(new MultiplierModifier("holyResist"));
+  coldResist(new MultiplierModifier("coldResist"));
 
   private final IStatModifier modifier;
 

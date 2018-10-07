@@ -10,11 +10,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.torocraft.jakel.Jakel;
-import net.torocraft.jakel.spells.SpellData;
 
 public class GuiContainerSpell extends GuiContainer {
 
-  public static final ResourceLocation LOCATION_BOOK_CODE_BACKGROUND = new ResourceLocation(Jakel.MODID, "textures/gui/spell.png");
+  public static final ResourceLocation BACKGROUND = new ResourceLocation(Jakel.MODID, "textures/gui/spell.png");
 
   private static final int GUI_WIDTH = 207;
   private static final int GUI_HEIGHT = 214;
@@ -39,7 +38,7 @@ public class GuiContainerSpell extends GuiContainer {
   @Override
   protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
     GlStateManager.color(1, 1, 1, 1);
-    Minecraft.getMinecraft().getTextureManager().bindTexture(LOCATION_BOOK_CODE_BACKGROUND);
+    Minecraft.getMinecraft().getTextureManager().bindTexture(BACKGROUND);
     drawTexturedModalRect(guiX, guiY, 0, 0, GUI_WIDTH, GUI_HEIGHT);
     drawTextContent();
   }
